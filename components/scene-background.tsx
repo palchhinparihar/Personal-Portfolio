@@ -125,6 +125,21 @@ export default function SceneBackground() {
     }
     window.addEventListener("mousemove", onMouseMove)
 
+    // --- Scroll tracking ---
+    let scrollProgress = 0
+    let smoothScroll = 0
+    function onScroll() {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+      scrollProgress = maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0
+    }
+    window.addEventListener("scroll", onScroll, { passive: true })
+    onScroll()
+
+    // Store original positions for geometries
+    const icosaBasePos = { x: 3, y: 1, z: -2 }
+    const torusBasePos = { x: -3.5, y: -1, z: -1 }
+    const octaBasePos = { x: 0, y: -2.5, z: -3 }
+
     // --- Animation loop ---
     const clock = new THREE.Clock()
     let frameId: number
@@ -133,39 +148,72 @@ export default function SceneBackground() {
       frameId = requestAnimationFrame(animate)
       const t = clock.getElapsedTime()
 
-      // Particles rotation
-      particles.rotation.x = t * 0.02
-      particles.rotation.y = t * 0.03
+      // Smooth scroll interpolation for fluid transitions
+      smoothScroll += (scrollProgress - smoothScroll) * 0.04
 
-      // Moving light
-      movingLight.position.x = Math.sin(t * 0.5) * 5
-      movingLight.position.y = Math.cos(t * 0.3) * 5
+      // Scroll-driven multipliers
+      const spread = 1 + smoothScroll * 2.5
+      const spinBoost = 1 + smoothScroll * 3
+      const particleExpand = 1 + smoothScroll * 0.8
 
-      // Geometry group slow rotation
-      geoGroup.rotation.y = t * 0.05
+      // Particles rotation -- faster & expand with scroll
+      particles.rotation.x = t * 0.02 * spinBoost
+      particles.rotation.y = t * 0.03 * spinBoost
+      particles.scale.setScalar(particleExpand)
 
-      // Icosahedron
-      icosa.rotation.x = t * 0.3
-      icosa.rotation.z = t * 0.2
-      icosa.position.y = 1 + Math.sin(t * 0.5) * 0.5
+      // Particle opacity pulse on scroll
+      particleMaterial.opacity = 0.6 + smoothScroll * 0.3
+      particleMaterial.size = 0.05 + smoothScroll * 0.03
 
-      // Torus
-      torus.rotation.x = t * 0.4
-      torus.rotation.y = t * 0.2
-      torus.position.y = -1 + Math.cos(t * 0.6) * 0.4
+      // Moving light -- wider orbit on scroll
+      const lightRadius = 5 + smoothScroll * 4
+      movingLight.position.x = Math.sin(t * 0.5) * lightRadius
+      movingLight.position.y = Math.cos(t * 0.3) * lightRadius
+      movingLight.intensity = 2 + smoothScroll * 3
 
-      // Octahedron
-      octa.rotation.y = t * 0.35
-      octa.rotation.z = t * 0.15
-      octa.position.y = -2.5 + Math.sin(t * 0.4 + 1) * 0.3
+      // Geometry group -- accelerated rotation on scroll
+      geoGroup.rotation.y = t * 0.05 * spinBoost
 
-      // Grid scroll
-      grid.position.z = ((t * 0.3) % 1) * -1
+      // Icosahedron -- drifts outward on scroll
+      icosa.rotation.x = t * 0.3 * spinBoost
+      icosa.rotation.z = t * 0.2 * spinBoost
+      icosa.position.x = icosaBasePos.x * spread
+      icosa.position.y = (icosaBasePos.y + Math.sin(t * 0.5) * 0.5) * spread
+      icosa.position.z = icosaBasePos.z - smoothScroll * 2
+      icosa.scale.setScalar(1 + smoothScroll * 0.4)
 
-      // Subtle camera parallax from mouse
+      // Torus -- drifts outward on scroll
+      torus.rotation.x = t * 0.4 * spinBoost
+      torus.rotation.y = t * 0.2 * spinBoost
+      torus.position.x = torusBasePos.x * spread
+      torus.position.y = (torusBasePos.y + Math.cos(t * 0.6) * 0.4) * spread
+      torus.position.z = torusBasePos.z - smoothScroll * 1.5
+      torus.scale.setScalar(1 + smoothScroll * 0.3)
+
+      // Octahedron -- drifts outward on scroll
+      octa.rotation.y = t * 0.35 * spinBoost
+      octa.rotation.z = t * 0.15 * spinBoost
+      octa.position.x = octaBasePos.x * spread
+      octa.position.y = (octaBasePos.y + Math.sin(t * 0.4 + 1) * 0.3) * spread
+      octa.position.z = octaBasePos.z - smoothScroll * 2.5
+      octa.scale.setScalar(1 + smoothScroll * 0.5)
+
+      // Wireframe opacity shift on scroll
+      wireMat1.opacity = 0.25 + smoothScroll * 0.2
+      wireMat2.opacity = 0.2 + smoothScroll * 0.2
+      wireMat3.opacity = 0.2 + smoothScroll * 0.25
+
+      // Grid -- scroll affects speed and tilt
+      grid.position.z = ((t * (0.3 + smoothScroll * 0.5)) % 1) * -1
+      grid.rotation.x = -Math.PI / 2 + smoothScroll * 0.15
+
+      // Camera -- pulls back and shifts on scroll for depth
+      const camZ = 6 + smoothScroll * 3
+      const camY = smoothScroll * -1.5
       camera.position.x += (mouse.x * 0.5 - camera.position.x) * 0.02
-      camera.position.y += (mouse.y * 0.3 - camera.position.y) * 0.02
-      camera.lookAt(0, 0, 0)
+      camera.position.y += ((mouse.y * 0.3 + camY) - camera.position.y) * 0.02
+      camera.position.z += (camZ - camera.position.z) * 0.03
+      camera.lookAt(0, smoothScroll * -0.5, 0)
 
       renderer.render(scene, camera)
     }
@@ -184,6 +232,7 @@ export default function SceneBackground() {
     return () => {
       cancelAnimationFrame(frameId)
       window.removeEventListener("mousemove", onMouseMove)
+      window.removeEventListener("scroll", onScroll)
       window.removeEventListener("resize", onResize)
       renderer.dispose()
       particleGeometry.dispose()
