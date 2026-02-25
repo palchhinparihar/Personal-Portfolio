@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic"
 import Navbar from "@/components/navbar"
 import HeroSection from "@/components/hero-section"
+import AboutSection from "@/components/about-section"
 
 const SceneBackground = dynamic(
   () => import("@/components/scene-background"),
@@ -15,6 +16,7 @@ export default function Home() {
       <SceneBackground />
       <Navbar />
       <HeroSection />
+      <AboutSection />
     </main>
   )
 }
