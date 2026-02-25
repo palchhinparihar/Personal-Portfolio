@@ -1,29 +1,50 @@
 "use client"
 
 import { Canvas, useFrame } from "@react-three/fiber"
-import { useRef, useMemo } from "react"
+import { useRef, useMemo, useEffect } from "react"
 import * as THREE from "three"
 
 function FloatingParticles({ count = 200 }: { count?: number }) {
-  const mesh = useRef<THREE.Points>(null)
+  const pointsRef = useRef<THREE.Points>(null)
   const light = useRef<THREE.PointLight>(null)
 
-  const particles = useMemo(() => {
+  const geometry = useMemo(() => {
+    const geo = new THREE.BufferGeometry()
     const positions = new Float32Array(count * 3)
-    const sizes = new Float32Array(count)
     for (let i = 0; i < count; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 20
       positions[i * 3 + 1] = (Math.random() - 0.5) * 20
       positions[i * 3 + 2] = (Math.random() - 0.5) * 20
-      sizes[i] = Math.random() * 0.03 + 0.01
     }
-    return { positions, sizes }
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3))
+    return geo
   }, [count])
 
+  const material = useMemo(
+    () =>
+      new THREE.PointsMaterial({
+        size: 0.05,
+        color: new THREE.Color("#4a7cff"),
+        transparent: true,
+        opacity: 0.6,
+        sizeAttenuation: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      }),
+    []
+  )
+
+  useEffect(() => {
+    return () => {
+      geometry.dispose()
+      material.dispose()
+    }
+  }, [geometry, material])
+
   useFrame((state) => {
-    if (mesh.current) {
-      mesh.current.rotation.x = state.clock.elapsedTime * 0.02
-      mesh.current.rotation.y = state.clock.elapsedTime * 0.03
+    if (pointsRef.current) {
+      pointsRef.current.rotation.x = state.clock.elapsedTime * 0.02
+      pointsRef.current.rotation.y = state.clock.elapsedTime * 0.03
     }
     if (light.current) {
       light.current.position.x = Math.sin(state.clock.elapsedTime * 0.5) * 5
@@ -34,31 +55,7 @@ function FloatingParticles({ count = 200 }: { count?: number }) {
   return (
     <>
       <pointLight ref={light} color="#4a7cff" intensity={2} distance={15} />
-      <points ref={mesh}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={count}
-            array={particles.positions}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-size"
-            count={count}
-            array={particles.sizes}
-            itemSize={1}
-          />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.05}
-          color="#4a7cff"
-          transparent
-          opacity={0.6}
-          sizeAttenuation
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </points>
+      <points ref={pointsRef} geometry={geometry} material={material} />
     </>
   )
 }
