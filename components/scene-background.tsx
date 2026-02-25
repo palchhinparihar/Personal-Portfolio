@@ -3,96 +3,6 @@
 import { useEffect, useRef } from "react"
 import * as THREE from "three"
 
-const auroraVertex = `
-  uniform float uTime;
-  uniform float uScroll;
-  varying vec2 vUv;
-  varying float vElevation;
-
-  // Simplex noise (compact)
-  vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
-  vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
-  vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}
-  vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
-  float snoise(vec3 v){
-    const vec2 C=vec2(1.0/6.0,1.0/3.0);
-    const vec4 D=vec4(0.0,0.5,1.0,2.0);
-    vec3 i=floor(v+dot(v,C.yyy));
-    vec3 x0=v-i+dot(i,C.xxx);
-    vec3 g=step(x0.yzx,x0.xyz);
-    vec3 l=1.0-g;
-    vec3 i1=min(g.xyz,l.zxy);
-    vec3 i2=max(g.xyz,l.zxy);
-    vec3 x1=x0-i1+C.xxx;
-    vec3 x2=x0-i2+C.yyy;
-    vec3 x3=x0-D.yyy;
-    i=mod289(i);
-    vec4 p=permute(permute(permute(
-      i.z+vec4(0.0,i1.z,i2.z,1.0))
-      +i.y+vec4(0.0,i1.y,i2.y,1.0))
-      +i.x+vec4(0.0,i1.x,i2.x,1.0));
-    float n_=0.142857142857;
-    vec3 ns=n_*D.wyz-D.xzx;
-    vec4 j=p-49.0*floor(p*ns.z*ns.z);
-    vec4 x_=floor(j*ns.z);
-    vec4 y_=floor(j-7.0*x_);
-    vec4 x=x_*ns.x+ns.yyyy;
-    vec4 y=y_*ns.x+ns.yyyy;
-    vec4 h=1.0-abs(x)-abs(y);
-    vec4 b0=vec4(x.xy,y.xy);
-    vec4 b1=vec4(x.zw,y.zw);
-    vec4 s0=floor(b0)*2.0+1.0;
-    vec4 s1=floor(b1)*2.0+1.0;
-    vec4 sh=-step(h,vec4(0.0));
-    vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;
-    vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
-    vec3 p0=vec3(a0.xy,h.x);
-    vec3 p1=vec3(a0.zw,h.y);
-    vec3 p2=vec3(a1.xy,h.z);
-    vec3 p3=vec3(a1.zw,h.w);
-    vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
-    p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
-    vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);
-    m=m*m;
-    return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
-  }
-
-  void main(){
-    vUv = uv;
-    vec3 pos = position;
-    float slow = uTime * 0.06;
-    float n = snoise(vec3(pos.x * 0.6, pos.y * 0.3 + slow, slow * 0.5)) * (0.4 + uScroll * 0.2);
-    pos.z += n;
-    pos.y += sin(pos.x * 1.5 + uTime * 0.12 + uScroll * 0.5) * 0.15;
-    vElevation = n;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-  }
-`
-
-const auroraFragment = `
-  uniform float uTime;
-  uniform float uScroll;
-  uniform vec3 uColor1;
-  uniform vec3 uColor2;
-  varying vec2 vUv;
-  varying float vElevation;
-
-  void main(){
-    float blend = smoothstep(-0.3, 0.3, vElevation);
-    vec3 color = mix(uColor1, uColor2, blend);
-
-    // Soft vertical & horizontal fade
-    float fade = smoothstep(0.0, 0.25, vUv.y) * smoothstep(1.0, 0.75, vUv.y);
-    fade *= smoothstep(0.0, 0.15, vUv.x) * smoothstep(1.0, 0.85, vUv.x);
-
-    // Very gentle pulse
-    float pulse = 0.12 + 0.04 * sin(uTime * 0.3 + vUv.x * 3.0);
-
-    float alpha = fade * (pulse + uScroll * 0.06);
-    gl_FragColor = vec4(color, alpha);
-  }
-`
-
 export default function SceneBackground() {
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -100,76 +10,160 @@ export default function SceneBackground() {
     const container = containerRef.current
     if (!container) return
 
+    // --- Renderer & Scene ---
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color("#050a18")
+    scene.background = new THREE.Color("#060b1a")
+    scene.fog = new THREE.FogExp2("#060b1a", 0.035)
 
     const camera = new THREE.PerspectiveCamera(
-      55,
+      60,
       container.clientWidth / container.clientHeight,
       0.1,
-      80
+      100
     )
-    camera.position.set(0, 0, 5)
+    camera.position.set(0, 4, 12)
+    camera.lookAt(0, 0, 0)
 
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     renderer.setSize(container.clientWidth, container.clientHeight)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
     container.appendChild(renderer.domElement)
 
-    // --- 3 soft aurora ribbons ---
-    const ribbonConfigs = [
-      { c1: "#0a2a6e", c2: "#1560b5", y: 1.2, z: -4, rx: -0.15 },
-      { c1: "#0c1f5e", c2: "#0e4a8a", y: -0.3, z: -5, rx: -0.1 },
-      { c1: "#081a50", c2: "#1e5fa0", y: -1.8, z: -6, rx: -0.05 },
-    ]
+    // --- Wave terrain mesh ---
+    const segW = 128
+    const segH = 128
+    const planeGeo = new THREE.PlaneGeometry(40, 40, segW, segH)
+    planeGeo.rotateX(-Math.PI / 2)
 
-    const materials: THREE.ShaderMaterial[] = []
-    const ribbons: THREE.Mesh[] = []
+    const waveMat = new THREE.ShaderMaterial({
+      vertexShader: `
+        uniform float uTime;
+        uniform float uScroll;
+        varying float vHeight;
+        varying vec2 vUv;
 
-    ribbonConfigs.forEach((cfg) => {
-      const geo = new THREE.PlaneGeometry(16, 3.5, 80, 20)
-      const mat = new THREE.ShaderMaterial({
-        vertexShader: auroraVertex,
-        fragmentShader: auroraFragment,
-        uniforms: {
-          uTime: { value: 0 },
-          uScroll: { value: 0 },
-          uColor1: { value: new THREE.Color(cfg.c1) },
-          uColor2: { value: new THREE.Color(cfg.c2) },
-        },
-        transparent: true,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-      })
-      const mesh = new THREE.Mesh(geo, mat)
-      mesh.position.set(0, cfg.y, cfg.z)
-      mesh.rotation.x = cfg.rx
-      scene.add(mesh)
-      ribbons.push(mesh)
-      materials.push(mat)
+        void main() {
+          vUv = uv;
+          vec3 pos = position;
+
+          float scrollFactor = 1.0 + uScroll * 1.5;
+
+          // Layered waves
+          float w1 = sin(pos.x * 0.3 + uTime * 0.15) * cos(pos.z * 0.2 + uTime * 0.1) * 1.2 * scrollFactor;
+          float w2 = sin(pos.x * 0.8 - uTime * 0.08 + pos.z * 0.5) * 0.4;
+          float w3 = cos(pos.z * 0.6 + uTime * 0.12 + pos.x * 0.3) * 0.3 * scrollFactor;
+          float ripple = sin(length(pos.xz) * 0.5 - uTime * 0.2) * 0.2;
+
+          pos.y += w1 + w2 + w3 + ripple;
+          vHeight = pos.y;
+
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float uTime;
+        uniform float uScroll;
+        varying float vHeight;
+        varying vec2 vUv;
+
+        void main() {
+          // Height-based color: deep navy -> soft blue glow on peaks
+          vec3 deep = vec3(0.02, 0.04, 0.1);
+          vec3 mid  = vec3(0.04, 0.1, 0.25);
+          vec3 peak = vec3(0.12, 0.3, 0.6);
+
+          float t = smoothstep(-1.2, 1.8, vHeight);
+          vec3 col = mix(deep, mid, smoothstep(0.0, 0.4, t));
+          col = mix(col, peak, smoothstep(0.5, 1.0, t));
+
+          // Subtle glow intensifies with scroll
+          col += peak * smoothstep(0.6, 1.0, t) * (0.15 + uScroll * 0.2);
+
+          // Edge fade
+          float edgeFade = smoothstep(0.0, 0.12, vUv.x) * smoothstep(1.0, 0.88, vUv.x);
+          edgeFade *= smoothstep(0.0, 0.12, vUv.y) * smoothstep(1.0, 0.88, vUv.y);
+
+          float alpha = 0.85 * edgeFade;
+          gl_FragColor = vec4(col, alpha);
+        }
+      `,
+      uniforms: {
+        uTime: { value: 0 },
+        uScroll: { value: 0 },
+      },
+      transparent: true,
+      side: THREE.DoubleSide,
+      wireframe: false,
     })
 
-    // --- Sparse background stars ---
-    const starCount = 80
-    const starGeo = new THREE.BufferGeometry()
-    const starPos = new Float32Array(starCount * 3)
-    for (let i = 0; i < starCount; i++) {
-      starPos[i * 3] = (Math.random() - 0.5) * 30
-      starPos[i * 3 + 1] = (Math.random() - 0.5) * 18
-      starPos[i * 3 + 2] = -8 - Math.random() * 12
-    }
-    starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3))
-    const starMat = new THREE.PointsMaterial({
-      size: 0.025,
-      color: 0x6688cc,
+    const terrain = new THREE.Mesh(planeGeo, waveMat)
+    terrain.position.set(0, -2, -4)
+    scene.add(terrain)
+
+    // --- Wireframe overlay (very faint grid lines on the terrain) ---
+    const wireGeo = new THREE.PlaneGeometry(40, 40, 48, 48)
+    wireGeo.rotateX(-Math.PI / 2)
+    const wireMat = new THREE.ShaderMaterial({
+      vertexShader: `
+        uniform float uTime;
+        uniform float uScroll;
+        varying vec2 vUv;
+
+        void main() {
+          vUv = uv;
+          vec3 pos = position;
+          float scrollFactor = 1.0 + uScroll * 1.5;
+          float w1 = sin(pos.x * 0.3 + uTime * 0.15) * cos(pos.z * 0.2 + uTime * 0.1) * 1.2 * scrollFactor;
+          float w2 = sin(pos.x * 0.8 - uTime * 0.08 + pos.z * 0.5) * 0.4;
+          float w3 = cos(pos.z * 0.6 + uTime * 0.12 + pos.x * 0.3) * 0.3 * scrollFactor;
+          float ripple = sin(length(pos.xz) * 0.5 - uTime * 0.2) * 0.2;
+          pos.y += w1 + w2 + w3 + ripple;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec2 vUv;
+        void main() {
+          float edgeFade = smoothstep(0.0, 0.15, vUv.x) * smoothstep(1.0, 0.85, vUv.x);
+          edgeFade *= smoothstep(0.0, 0.15, vUv.y) * smoothstep(1.0, 0.85, vUv.y);
+          gl_FragColor = vec4(0.15, 0.35, 0.7, 0.08 * edgeFade);
+        }
+      `,
+      uniforms: {
+        uTime: { value: 0 },
+        uScroll: { value: 0 },
+      },
       transparent: true,
-      opacity: 0.35,
+      wireframe: true,
+      depthWrite: false,
+    })
+    const wireOverlay = new THREE.Mesh(wireGeo, wireMat)
+    wireOverlay.position.set(0, -1.98, -4)
+    scene.add(wireOverlay)
+
+    // --- Floating tiny particles (dust motes) ---
+    const dustCount = 60
+    const dustGeo = new THREE.BufferGeometry()
+    const dustPositions = new Float32Array(dustCount * 3)
+    for (let i = 0; i < dustCount; i++) {
+      dustPositions[i * 3] = (Math.random() - 0.5) * 25
+      dustPositions[i * 3 + 1] = Math.random() * 8 - 1
+      dustPositions[i * 3 + 2] = (Math.random() - 0.5) * 20 - 5
+    }
+    dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPositions, 3))
+    const dustMat = new THREE.PointsMaterial({
+      size: 0.04,
+      color: 0x4488cc,
+      transparent: true,
+      opacity: 0.3,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     })
-    const stars = new THREE.Points(starGeo, starMat)
-    scene.add(stars)
+    const dust = new THREE.Points(dustGeo, dustMat)
+    scene.add(dust)
+
+    // --- Ambient light ---
+    scene.add(new THREE.AmbientLight(0x1a2a4a, 0.5))
 
     // --- Mouse ---
     const mouse = { x: 0, y: 0 }
@@ -189,37 +183,38 @@ export default function SceneBackground() {
     window.addEventListener("scroll", onScroll, { passive: true })
     onScroll()
 
-    // --- Loop ---
+    // --- Animation loop ---
     const clock = new THREE.Clock()
     let frameId: number
 
     function animate() {
       frameId = requestAnimationFrame(animate)
       const t = clock.getElapsedTime()
-      smoothScroll += (scrollProgress - smoothScroll) * 0.035
+      smoothScroll += (scrollProgress - smoothScroll) * 0.04
 
-      // Update ribbon shaders
-      materials.forEach((mat, i) => {
-        mat.uniforms.uTime.value = t + i * 3
-        mat.uniforms.uScroll.value = smoothScroll
-      })
+      // Update wave shader uniforms
+      waveMat.uniforms.uTime.value = t
+      waveMat.uniforms.uScroll.value = smoothScroll
+      wireMat.uniforms.uTime.value = t
+      wireMat.uniforms.uScroll.value = smoothScroll
 
-      // Gentle ribbon drift on scroll
-      ribbons.forEach((r, i) => {
-        const dir = i % 2 === 0 ? 1 : -1
-        r.position.y += Math.sin(t * 0.08 + i * 1.5) * 0.0008
-        r.position.x += (Math.sin(t * 0.05 + i) * 0.15 * dir + smoothScroll * dir * 0.6 - r.position.x) * 0.005
-      })
+      // Terrain slowly rotates on Y to give life
+      terrain.rotation.y = t * 0.008 + smoothScroll * 0.3
+      wireOverlay.rotation.y = terrain.rotation.y
 
-      // Stars subtle drift
-      stars.rotation.y = t * 0.003 + smoothScroll * 0.04
-      starMat.opacity = 0.35 + smoothScroll * 0.15
+      // Dust drifts
+      dust.rotation.y = t * 0.005
+      dust.position.y = Math.sin(t * 0.1) * 0.2
+      dustMat.opacity = 0.3 + smoothScroll * 0.15
 
-      // Camera: soft parallax + gentle scroll pull
-      camera.position.x += (mouse.x * 0.25 - camera.position.x) * 0.015
-      camera.position.y += (mouse.y * 0.15 - smoothScroll * 0.3 - camera.position.y) * 0.015
-      camera.position.z += (5 - smoothScroll * 0.8 - camera.position.z) * 0.02
-      camera.lookAt(0, 0, -3)
+      // Camera: subtle mouse parallax + scroll-driven tilt
+      const camX = mouse.x * 0.4
+      const camY = 4 - smoothScroll * 2
+      const camZ = 12 - smoothScroll * 3
+      camera.position.x += (camX - camera.position.x) * 0.02
+      camera.position.y += (camY - camera.position.y) * 0.02
+      camera.position.z += (camZ - camera.position.z) * 0.02
+      camera.lookAt(0, -smoothScroll * 1.5, -4)
 
       renderer.render(scene, camera)
     }
@@ -241,10 +236,12 @@ export default function SceneBackground() {
       window.removeEventListener("scroll", onScroll)
       window.removeEventListener("resize", onResize)
       renderer.dispose()
-      starGeo.dispose()
-      starMat.dispose()
-      materials.forEach((m) => m.dispose())
-      ribbons.forEach((r) => r.geometry.dispose())
+      planeGeo.dispose()
+      waveMat.dispose()
+      wireGeo.dispose()
+      wireMat.dispose()
+      dustGeo.dispose()
+      dustMat.dispose()
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement)
       }
