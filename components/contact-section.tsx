@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useInView } from "framer-motion"
+import { motion, useInView, useScroll, useTransform } from "framer-motion"
 import { useRef, useState } from "react"
 import {
   FiMail,
@@ -57,6 +57,15 @@ export default function ContactSection() {
     email: "",
     message: "",
   })
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  })
+  
+  const headingY = useTransform(scrollYProgress, [0, 1], [30, -30])
+  const leftY = useTransform(scrollYProgress, [0, 1], [50, -50])
+  const rightY = useTransform(scrollYProgress, [0, 1], [70, -70])
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -81,6 +90,7 @@ export default function ContactSection() {
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: "easeOut" }}
+          style={{ y: headingY }}
           className="mb-16 text-center"
         >
           <span className="mb-3 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium tracking-widest uppercase text-primary">
@@ -102,6 +112,7 @@ export default function ContactSection() {
             initial={{ opacity: 0, x: -40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+            style={{ y: leftY }}
             className="flex flex-col gap-8 lg:col-span-2"
           >
             {/* Contact info cards */}
@@ -168,6 +179,7 @@ export default function ContactSection() {
             initial={{ opacity: 0, x: 40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+            style={{ y: rightY }}
             className="flex flex-col gap-4 rounded-2xl border border-border bg-card/60 p-5 backdrop-blur-sm sm:gap-5 sm:p-8 lg:col-span-3"
           >
             {/* Name */}

@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useInView, AnimatePresence } from "framer-motion"
+import { motion, useInView, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { useRef, useState } from "react"
 import {
   SiJavascript,
@@ -72,6 +72,14 @@ export default function SkillsSection() {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
   const [activeTab, setActiveTab] = useState("languages")
 
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  })
+  
+  const headingY = useTransform(scrollYProgress, [0, 1], [30, -30])
+  const gridY = useTransform(scrollYProgress, [0, 1], [50, -50])
+
   const activeCategory = categories.find((c) => c.key === activeTab)
 
   return (
@@ -86,6 +94,7 @@ export default function SkillsSection() {
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: "easeOut" }}
+          style={{ y: headingY }}
           className="mb-16 text-center"
         >
           <span className="mb-3 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium tracking-widest uppercase text-primary">
@@ -134,16 +143,17 @@ export default function SkillsSection() {
         </motion.div>
 
         {/* Skills display */}
-        <AnimatePresence mode="wait">
-          {activeCategory && (
-            <motion.div
-              key={activeCategory.key}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-              className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
-            >
+        <motion.div style={{ y: gridY }}>
+          <AnimatePresence mode="wait">
+            {activeCategory && (
+              <motion.div
+                key={activeCategory.key}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
+              >
               {activeCategory.skills.map((skill, i) => {
                 const SkillIcon = skill.icon
                 return (
@@ -175,9 +185,10 @@ export default function SkillsSection() {
                   </motion.div>
                 )
               })}
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   )

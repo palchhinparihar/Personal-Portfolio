@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useInView } from "framer-motion"
+import { motion, useInView, useScroll, useTransform } from "framer-motion"
 import { useRef, useState } from "react"
 import { FiExternalLink, FiGithub, FiImage } from "react-icons/fi"
 
@@ -165,6 +165,14 @@ function ProjectCard({
 export default function ProjectsSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  })
+  
+  const headingY = useTransform(scrollYProgress, [0, 1], [40, -40])
+  const gridY = useTransform(scrollYProgress, [0, 1], [60, -60])
 
   return (
     <section
@@ -178,6 +186,7 @@ export default function ProjectsSection() {
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: "easeOut" }}
+          style={{ y: headingY }}
           className="mb-16 text-center"
         >
           <span className="mb-3 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium tracking-widest uppercase text-primary">
@@ -190,7 +199,7 @@ export default function ProjectsSection() {
         </motion.div>
 
         {/* Masonry-style grid gallery */}
-        <div className="grid auto-rows-auto grid-cols-1 gap-4 sm:grid-cols-3">
+        <motion.div style={{ y: gridY }} className="grid auto-rows-auto grid-cols-1 gap-4 sm:grid-cols-3">
           {projects.map((project, i) => (
             <ProjectCard
               key={project.title}
@@ -199,7 +208,7 @@ export default function ProjectsSection() {
               isInView={isInView}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

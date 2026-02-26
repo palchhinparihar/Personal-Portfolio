@@ -1,6 +1,7 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { useRef } from "react"
 import { FiFileText, FiSend, FiMonitor } from "react-icons/fi"
 import { FaGithub, FaLinkedinIn, FaXTwitter } from "react-icons/fa6"
 import { SiDevpost } from "react-icons/si"
@@ -47,8 +48,19 @@ const socialLinks = [
 ]
 
 export default function HeroSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  })
+
+  const y = useTransform(scrollYProgress, [0, 1], [0, 150])
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95])
+
   return (
     <section
+      ref={sectionRef}
       id="home"
       className="relative flex min-h-screen items-center justify-center px-4 sm:px-6"
     >
@@ -56,6 +68,7 @@ export default function HeroSection() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
+        style={{ y, opacity, scale }}
         className="relative z-10 mx-auto max-w-3xl text-center"
       >
         {/* Greeting tag */}

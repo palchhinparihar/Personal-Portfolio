@@ -1,12 +1,20 @@
 "use client"
 
-import { motion, useInView } from "framer-motion"
+import { motion, useInView, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
 import { FiUser } from "react-icons/fi"
 
 export default function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  })
+  
+  const imageY = useTransform(scrollYProgress, [0, 1], [60, -60])
+  const textY = useTransform(scrollYProgress, [0, 1], [40, -40])
 
   return (
     <section
@@ -33,11 +41,12 @@ export default function AboutSection() {
 
         {/* Content grid */}
         <div className="grid items-center gap-8 sm:gap-12 md:grid-cols-2 md:gap-16">
-          {/* Image placeholder - slides in from left */}
+          {/* Image placeholder - slides in from left with parallax */}
           <motion.div
             initial={{ opacity: 0, x: -60 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            style={{ y: imageY }}
           >
             <div className="group relative">
               {/* Decorative border offset */}
@@ -68,11 +77,12 @@ export default function AboutSection() {
             </div>
           </motion.div>
 
-          {/* Description - slides in from right */}
+          {/* Description - slides in from right with parallax */}
           <motion.div
             initial={{ opacity: 0, x: 60 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.35 }}
+            style={{ y: textY }}
             className="flex flex-col gap-6"
           >
             <h3 className="text-xl font-semibold text-foreground sm:text-2xl">

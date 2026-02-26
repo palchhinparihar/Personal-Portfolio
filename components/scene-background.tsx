@@ -229,41 +229,77 @@ export default function SceneBackground() {
       const t = clock.getElapsedTime()
       smoothScroll += (scrollTarget - smoothScroll) * 0.04
 
-      // Update pillar uniforms and subtle sway
+      // Define scroll phases (0-0.25, 0.25-0.5, 0.5-0.75, 0.75-1)
+      const phase1 = Math.min(smoothScroll / 0.25, 1) // Hero to About
+      const phase2 = Math.max(0, Math.min((smoothScroll - 0.25) / 0.25, 1)) // About to Experience
+      const phase3 = Math.max(0, Math.min((smoothScroll - 0.5) / 0.25, 1)) // Experience to Skills
+      const phase4 = Math.max(0, Math.min((smoothScroll - 0.75) / 0.25, 1)) // Skills to Contact
+
+      // Dynamic movement multipliers based on scroll position
+      const swayIntensity = 0.3 + phase1 * 0.4 - phase3 * 0.2 + phase4 * 0.3
+      const rotationSpeed = 0.2 + phase2 * 0.3 - phase4 * 0.1
+      const pulseMultiplier = 1 + phase1 * 0.5 + phase3 * 0.3
+
+      // Update pillar uniforms and dynamic sway based on scroll
       for (let i = 0; i < pillarCount; i++) {
         const mat = pillars[i].material as THREE.ShaderMaterial
-        mat.uniforms.uTime.value = t
+        mat.uniforms.uTime.value = t * pulseMultiplier
         // Increase opacity on scroll for more dramatic effect
         mat.uniforms.uOpacity.value =
-          (0.12 + Math.random() * 0.001) + smoothScroll * 0.12
+          (0.12 + Math.random() * 0.001) + smoothScroll * 0.15
 
         const d = pillarData[i]
-        // Gentle sway
-        pillars[i].position.x =
-          d.baseX + Math.sin(t * d.speed + d.phase) * 0.3
-        pillars[i].position.z =
-          d.baseZ + Math.cos(t * d.speed * 0.7 + d.phase) * 0.2
+        
+        // Dynamic sway patterns based on scroll position
+        const swayX = Math.sin(t * d.speed * (1 + phase2 * 0.5) + d.phase) * swayIntensity
+        const swayZ = Math.cos(t * d.speed * 0.7 * (1 + phase3 * 0.3) + d.phase) * swayIntensity * 0.7
+        
+        // Add circular motion on deeper scroll
+        const circleMotion = phase3 * Math.sin(t * 0.5 + i * 0.3) * 0.5
+        const circleMotionZ = phase3 * Math.cos(t * 0.5 + i * 0.3) * 0.5
+        
+        pillars[i].position.x = d.baseX + swayX + circleMotion
+        pillars[i].position.z = d.baseZ + swayZ + circleMotionZ
 
-        // Pillars billow slightly with scroll
-        const scrollScale = 1 + smoothScroll * 0.3
+        // Pillars billow and twist with scroll
+        const scrollScale = 1 + smoothScroll * 0.35 + phase4 * 0.2
         pillars[i].scale.y = scrollScale
-        pillars[i].scale.x = 1 + smoothScroll * 0.15
+        pillars[i].scale.x = 1 + smoothScroll * 0.15 + phase2 * 0.1
 
-        // Keep facing camera
+        // Keep facing camera with dynamic rotation
         pillars[i].lookAt(camera.position)
-        pillars[i].rotation.z = Math.sin(t * 0.2 + d.phase) * 0.05
+        pillars[i].rotation.z = Math.sin(t * rotationSpeed + d.phase) * (0.05 + phase2 * 0.03)
       }
 
-      // Ground glow
+      // Ground glow with scroll-based intensity
       groundMat.uniforms.uTime.value = t
+      const groundColor = new THREE.Color().lerpColors(
+        purpleDark,
+        purpleGlow,
+        smoothScroll * 0.4
+      )
+      groundMat.uniforms.uColor.value = groundColor
 
-      // Dust particles float upward
+      // Dust particles with dynamic movement based on scroll
       const dArr = dustGeo.attributes.position.array as Float32Array
       for (let i = 0; i < dustCount; i++) {
         const idx = i * 3
-        dArr[idx] += dustVel[i].x
-        dArr[idx + 1] += dustVel[i].y * (1 + smoothScroll * 0.5)
-        dArr[idx + 2] += dustVel[i].z
+        
+        // Horizontal drift changes with scroll
+        const driftX = dustVel[i].x * (1 + phase2 * 2 - phase4)
+        const driftZ = dustVel[i].z * (1 + phase3 * 1.5)
+        
+        // Vertical speed increases then slows
+        const verticalSpeed = dustVel[i].y * (1 + smoothScroll * 0.8 - phase4 * 0.3)
+        
+        // Add swirl motion at deeper scroll positions
+        const swirlAngle = t * 0.3 + i * 0.1
+        const swirlRadius = phase3 * 0.02
+        
+        dArr[idx] += driftX + Math.cos(swirlAngle) * swirlRadius
+        dArr[idx + 1] += verticalSpeed
+        dArr[idx + 2] += driftZ + Math.sin(swirlAngle) * swirlRadius
+        
         // Reset particles that go too high
         if (dArr[idx + 1] > 25) {
           dArr[idx + 1] = -1
@@ -272,15 +308,22 @@ export default function SceneBackground() {
         }
       }
       dustGeo.attributes.position.needsUpdate = true
-      dustMat.opacity = 0.35 + smoothScroll * 0.25
+      dustMat.opacity = 0.35 + smoothScroll * 0.3 - phase4 * 0.1
+      dustMat.size = 0.06 + phase2 * 0.02
 
-      // Camera
-      const camY = 2 + smoothScroll * 3
-      const camZ = 18 - smoothScroll * 4
-      camera.position.x += (mouse.x * 1.5 - camera.position.x) * 0.015
-      camera.position.y += (camY + mouse.y * 1 - camera.position.y) * 0.015
+      // Camera movement changes based on scroll phase
+      const camY = 2 + phase1 * 2 + phase2 * 1 + phase3 * 0.5 + phase4 * 1
+      const camZ = 18 - phase1 * 3 - phase2 * 1 + phase4 * 2
+      const camX = phase2 * 2 - phase3 * 1 + phase4 * -1
+      
+      camera.position.x += (camX + mouse.x * (1.5 - smoothScroll * 0.5) - camera.position.x) * 0.015
+      camera.position.y += (camY + mouse.y * (1 - smoothScroll * 0.3) - camera.position.y) * 0.015
       camera.position.z += (camZ - camera.position.z) * 0.02
-      camera.lookAt(0, 4 + smoothScroll * 2, -3)
+      
+      // Look at point shifts with scroll
+      const lookY = 4 + phase1 * 1.5 + phase2 * 0.5 + phase3 * 0.5
+      const lookZ = -3 - phase2 * 2 + phase4 * 1
+      camera.lookAt(phase3 * 1 - phase4 * 0.5, lookY, lookZ)
 
       renderer.render(scene, camera)
     }

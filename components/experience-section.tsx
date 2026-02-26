@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useInView } from "framer-motion"
+import { motion, useInView, useScroll, useTransform } from "framer-motion"
 import { useRef, useState } from "react"
 import { FiBriefcase, FiCalendar, FiExternalLink, FiChevronDown } from "react-icons/fi"
 
@@ -261,7 +261,15 @@ function ExperienceCard({
 export default function ExperienceSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
-
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  })
+  
+  const headingY = useTransform(scrollYProgress, [0, 1], [40, -40])
+  const timelineY = useTransform(scrollYProgress, [0, 1], [60, -60])
+  
   return (
     <section
       ref={sectionRef}
@@ -269,13 +277,14 @@ export default function ExperienceSection() {
       className="relative z-10 px-4 py-16 sm:px-6 md:py-32"
     >
       <div className="mx-auto max-w-5xl">
-        {/* Section heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="mb-16 text-center"
-        >
+{/* Section heading */}
+  <motion.div
+  initial={{ opacity: 0, y: 40 }}
+  animate={isInView ? { opacity: 1, y: 0 } : {}}
+  transition={{ duration: 0.7, ease: "easeOut" }}
+  style={{ y: headingY }}
+  className="mb-16 text-center"
+  >
           <span className="mb-3 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium tracking-widest uppercase text-primary">
             Career
           </span>
@@ -285,8 +294,8 @@ export default function ExperienceSection() {
           <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-primary/60" />
         </motion.div>
 
-        {/* Timeline layout */}
-        <div className="relative">
+{/* Timeline layout */}
+  <motion.div style={{ y: timelineY }} className="relative">
           {/* Vertical timeline line */}
           <motion.div
             initial={{ scaleY: 0 }}
@@ -303,11 +312,11 @@ export default function ExperienceSection() {
                 index={i}
                 isInView={isInView}
                 isLeft={i % 2 === 0}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
+  />
+  ))}
+  </div>
+  </motion.div>
+  </div>
+  </section>
   )
 }
