@@ -16,40 +16,53 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
     }
+
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+
+    handleResize()
     window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("resize", handleResize)
+    }
   }, [])
+
+  const shouldShrink = scrolled && isDesktop
 
   return (
     <motion.header
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 flex justify-center"
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 lg:px-0"
     >
-      {/* Outer wrapper -- handles width + border-radius transition */}
       <motion.div
         animate={{
-          maxWidth: scrolled ? 720 : 1200,
-          borderRadius: scrolled ? 999 : 0,
+          maxWidth: shouldShrink ? 720 : 1200,
+          borderRadius: shouldShrink ? 999 : 0,
+          marginTop: shouldShrink ? 12 : 0,
         }}
         transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-        className={`w-full transition-all duration-400 ${
+        className={`w-full transition-colors duration-300 ${
           scrolled
-            ? "mt-3 border border-border bg-background/70 shadow-lg shadow-primary/5 backdrop-blur-xl"
-            : "bg-transparent"
-        }`}
+            ? "border border-border bg-background/80 shadow-lg shadow-primary/5 backdrop-blur-xl"
+            : "bg-transparent border-transparent"
+        } ${!isDesktop && scrolled ? "mt-2 rounded-2xl" : ""}`}
       >
-        <nav className="flex items-center justify-between px-5 py-3 sm:px-6">
-          {/* Brand */}
+        <nav className="flex items-center justify-between px-4 py-3 sm:px-5">
           <motion.a
             href="#home"
-            className="cursor-pointer text-lg font-semibold tracking-tight text-foreground sm:text-xl"
+            className="cursor-pointer text-lg font-semibold tracking-tight text-foreground"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -58,7 +71,6 @@ export default function Navbar() {
             {" />"}
           </motion.a>
 
-          {/* Desktop nav */}
           <ul className="hidden items-center gap-6 lg:flex">
             {navLinks.map((link) => (
               <li key={link.label}>
@@ -73,7 +85,6 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Mobile toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="cursor-pointer text-foreground lg:hidden"
@@ -83,17 +94,15 @@ export default function Navbar() {
           </button>
         </nav>
 
-        {/* Mobile menu */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden border-t border-border bg-background/95 backdrop-blur-xl lg:hidden"
-              style={{ borderRadius: scrolled ? "0 0 24px 24px" : 0 }}
+              className="overflow-hidden border-t border-border bg-background/95 backdrop-blur-xl lg:hidden rounded-b-2xl"
             >
-              <ul className="flex flex-col gap-3 px-5 py-5">
+              <ul className="flex flex-col gap-3 px-4 py-4 sm:px-5 sm:py-5">
                 {navLinks.map((link, i) => (
                   <motion.li
                     key={link.label}
