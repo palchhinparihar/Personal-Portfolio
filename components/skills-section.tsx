@@ -19,11 +19,11 @@ import {
   SiGit,
   SiDocker,
   SiFigma,
-  SiVisualstudiocode,
   SiVercel,
   SiHtml5,
   SiCss3,
 } from "react-icons/si"
+import { VscCode } from "react-icons/vsc"
 import { FiCode, FiLayout, FiServer, FiTool } from "react-icons/fi"
 
 const categories = [
@@ -71,7 +71,7 @@ const categories = [
       { name: "Git", icon: SiGit, color: "#F05032" },
       { name: "Docker", icon: SiDocker, color: "#2496ED" },
       { name: "Figma", icon: SiFigma, color: "#F24E1E" },
-      { name: "VS Code", icon: SiVisualstudiocode, color: "#007ACC" },
+      { name: "VS Code", icon: VscCode, color: "#007ACC" },
       { name: "Vercel", icon: SiVercel, color: "#FFFFFF" },
     ],
   },
