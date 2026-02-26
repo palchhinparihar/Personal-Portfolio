@@ -15,6 +15,9 @@ export const metadata: Metadata = {
     'Hi, Palchhin here~ Welcome to my personal portfolio. Explore my work, projects, and connect with me.',
   keywords: ['Palchhin', 'portfolio', 'developer', 'web development', 'personal website'],
   authors: [{ name: 'Palchhin' }],
+  icons: {
+    icon: '/icon.png',
+  },
   openGraph: {
     title: 'Palchhin | Personal Portfolio',
     description:

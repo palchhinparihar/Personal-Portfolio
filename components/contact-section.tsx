@@ -29,8 +29,8 @@ const contactInfo = [
   {
     icon: FiMail,
     label: "Email",
-    value: "hello@palchhin.dev",
-    href: "mailto:hello@palchhin.dev",
+    value: "palchhinparihar@gmail.com",
+    href: "mailto:palchhinparihar@gmail.com",
   },
   {
     icon: FiMapPin,
@@ -41,12 +41,12 @@ const contactInfo = [
 ]
 
 const socials = [
-  { icon: FaGithub, label: "GitHub", href: "https://github.com" },
-  { icon: FaLinkedinIn, label: "LinkedIn", href: "https://linkedin.com" },
-  { icon: FaXTwitter, label: "Twitter", href: "https://x.com" },
-  { icon: CodedexIcon, label: "Codedex", href: "https://codedex.io", isCustom: true },
-  { icon: SiDevpost, label: "Devpost", href: "https://devpost.com" },
-  { icon: DevfolioIcon, label: "Devfolio", href: "https://devfolio.co", isCustom: true },
+  { icon: FaGithub, label: "GitHub", href: "https://github.com/palchhinparihar" },
+  { icon: FaLinkedinIn, label: "LinkedIn", href: "https://www.linkedin.com/in/palchhinparihar" },
+  { icon: FaXTwitter, label: "Twitter", href: "https://x.com/palchhinx" },
+  { icon: CodedexIcon, label: "Codedex", href: "https://www.codedex.io/@palchhin", isCustom: true },
+  { icon: SiDevpost, label: "Devpost", href: "https://devpost.com/palchhinparihar" },
+  { icon: DevfolioIcon, label: "Devfolio", href: "https://devfolio.co/@palchhinparihar", isCustom: true },
 ]
 
 export default function ContactSection() {
