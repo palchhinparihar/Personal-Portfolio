@@ -63,7 +63,7 @@ export default function AboutSection() {
               <motion.div
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-                className="absolute -bottom-2 -right-2 h-5 w-5 rounded-full bg-primary/80 shadow-[0_0_20px_rgba(74,124,255,0.4)]"
+                className="absolute -bottom-2 -right-2 h-5 w-5 rounded-full bg-primary/80 shadow-[0_0_20px_rgba(168,85,247,0.5)]"
               />
             </div>
           </motion.div>

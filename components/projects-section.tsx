@@ -91,7 +91,7 @@ function ProjectCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card/60 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(74,124,255,0.08)]">
+      <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card/60 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.1)]">
         {/* Image placeholder */}
         <div
           className={`relative w-full overflow-hidden ${project.aspect}`}

@@ -10,239 +10,197 @@ export default function SceneBackground() {
     const container = containerRef.current
     if (!container) return
 
+    // --- Renderer setup ---
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color("#0a0710")
-    scene.fog = new THREE.FogExp2("#0a0710", 0.035)
+    scene.background = new THREE.Color("#08060e")
+    scene.fog = new THREE.FogExp2("#08060e", 0.02)
 
     const camera = new THREE.PerspectiveCamera(
-      55,
+      60,
       container.clientWidth / container.clientHeight,
       0.1,
       200
     )
-    camera.position.set(0, 12, 30)
-    camera.lookAt(0, 0, 0)
+    camera.position.set(0, 2, 18)
+    camera.lookAt(0, 4, 0)
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
     renderer.setSize(container.clientWidth, container.clientHeight)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
     container.appendChild(renderer.domElement)
 
-    // --- Ocean plane ---
-    const planeSize = 120
-    const segments = 200
-    const geometry = new THREE.PlaneGeometry(planeSize, planeSize, segments, segments)
-    geometry.rotateX(-Math.PI / 2)
+    // --- Color palette ---
+    const purpleDark = new THREE.Color("#3b0764")
+    const purpleMid = new THREE.Color("#7c3aed")
+    const purpleLight = new THREE.Color("#c084fc")
+    const purpleGlow = new THREE.Color("#a855f7")
 
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 },
-        uScroll: { value: 0 },
-        uColorDeep: { value: new THREE.Color("#1a0533") },
-        uColorMid: { value: new THREE.Color("#3b1578") },
-        uColorPeak: { value: new THREE.Color("#7c3aed") },
-        uColorFoam: { value: new THREE.Color("#c084fc") },
-      },
-      vertexShader: `
-        uniform float uTime;
-        uniform float uScroll;
-        varying float vElevation;
-        varying vec3 vWorldPos;
+    // --- Light Pillars ---
+    const pillarCount = 14
+    const pillars: THREE.Mesh[] = []
+    const pillarData: {
+      baseX: number
+      baseZ: number
+      speed: number
+      phase: number
+      height: number
+      pulseSpeed: number
+    }[] = []
 
-        // Simplex 3D noise
-        vec3 mod289(vec3 x) { return x - floor(x*(1.0/289.0))*289.0; }
-        vec4 mod289(vec4 x) { return x - floor(x*(1.0/289.0))*289.0; }
-        vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
-        vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159-0.85373472095314*r; }
-        float snoise(vec3 v) {
-          const vec2 C = vec2(1.0/6.0, 1.0/3.0);
-          const vec4 D = vec4(0.0,0.5,1.0,2.0);
-          vec3 i = floor(v+dot(v,C.yyy));
-          vec3 x0 = v-i+dot(i,C.xxx);
-          vec3 g = step(x0.yzx, x0.xyz);
-          vec3 l = 1.0-g;
-          vec3 i1 = min(g.xyz, l.zxy);
-          vec3 i2 = max(g.xyz, l.zxy);
-          vec3 x1 = x0-i1+C.xxx;
-          vec3 x2 = x0-i2+C.yyy;
-          vec3 x3 = x0-D.yyy;
-          i = mod289(i);
-          vec4 p = permute(permute(permute(
-            i.z+vec4(0.0,i1.z,i2.z,1.0))
-            +i.y+vec4(0.0,i1.y,i2.y,1.0))
-            +i.x+vec4(0.0,i1.x,i2.x,1.0));
-          float n_ = 0.142857142857;
-          vec3 ns = n_*D.wyz-D.xzx;
-          vec4 j = p-49.0*floor(p*ns.z*ns.z);
-          vec4 x_ = floor(j*ns.z);
-          vec4 y_ = floor(j-7.0*x_);
-          vec4 x2_ = x_*ns.x+ns.yyyy;
-          vec4 y2_ = y_*ns.x+ns.yyyy;
-          vec4 h = 1.0-abs(x2_)-abs(y2_);
-          vec4 b0 = vec4(x2_.xy, y2_.xy);
-          vec4 b1 = vec4(x2_.zw, y2_.zw);
-          vec4 s0 = floor(b0)*2.0+1.0;
-          vec4 s1 = floor(b1)*2.0+1.0;
-          vec4 sh = -step(h, vec4(0.0));
-          vec4 a0 = b0.xzyw+s0.xzyw*sh.xxyy;
-          vec4 a1 = b1.xzyw+s1.xzyw*sh.zzww;
-          vec3 p0 = vec3(a0.xy,h.x);
-          vec3 p1 = vec3(a0.zw,h.y);
-          vec3 p2 = vec3(a1.xy,h.z);
-          vec3 p3 = vec3(a1.zw,h.w);
-          vec4 norm = taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
-          p0*=norm.x; p1*=norm.y; p2*=norm.z; p3*=norm.w;
-          vec4 m = max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);
-          m = m*m;
-          return 42.0*dot(m*m, vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
-        }
+    for (let i = 0; i < pillarCount; i++) {
+      const height = 12 + Math.random() * 20
+      const width = 0.08 + Math.random() * 0.25
+      const geo = new THREE.PlaneGeometry(width, height, 1, 64)
 
-        void main() {
-          vec3 pos = position;
-          float scrollAmp = 1.0 + uScroll * 2.0;
-          float speed = uTime * 0.4;
+      // Tint each pillar a slightly different shade
+      const t = Math.random()
+      const col = new THREE.Color().lerpColors(purpleMid, purpleLight, t)
 
-          // Layer 1: large rolling waves
-          float wave1 = snoise(vec3(pos.x * 0.04, pos.z * 0.04, speed * 0.5)) * 3.5 * scrollAmp;
-          // Layer 2: medium waves
-          float wave2 = snoise(vec3(pos.x * 0.1, pos.z * 0.08, speed * 0.8)) * 1.2 * scrollAmp;
-          // Layer 3: small ripples
-          float wave3 = snoise(vec3(pos.x * 0.25, pos.z * 0.25, speed * 1.2)) * 0.3;
-          // Layer 4: micro detail
-          float wave4 = snoise(vec3(pos.x * 0.6, pos.z * 0.5, speed * 1.5)) * 0.1;
+      const mat = new THREE.ShaderMaterial({
+        uniforms: {
+          uColor: { value: col },
+          uTime: { value: 0 },
+          uPulseSpeed: { value: 0.5 + Math.random() * 1.5 },
+          uOpacity: { value: 0.12 + Math.random() * 0.18 },
+        },
+        vertexShader: `
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform vec3 uColor;
+          uniform float uTime;
+          uniform float uPulseSpeed;
+          uniform float uOpacity;
+          varying vec2 vUv;
 
-          float elevation = wave1 + wave2 + wave3 + wave4;
-          pos.y += elevation;
+          void main() {
+            // Vertical fade: strongest in center, fades to top and bottom
+            float vertFade = 1.0 - abs(vUv.y - 0.45) * 1.6;
+            vertFade = clamp(vertFade, 0.0, 1.0);
+            vertFade = pow(vertFade, 1.8);
 
-          vElevation = elevation;
-          vWorldPos = pos;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform float uTime;
-        uniform float uScroll;
-        uniform vec3 uColorDeep;
-        uniform vec3 uColorMid;
-        uniform vec3 uColorPeak;
-        uniform vec3 uColorFoam;
-        varying float vElevation;
-        varying vec3 vWorldPos;
+            // Horizontal fade: thin beam effect
+            float horizFade = 1.0 - abs(vUv.x - 0.5) * 2.0;
+            horizFade = pow(clamp(horizFade, 0.0, 1.0), 0.6);
 
-        void main() {
-          // Normalize elevation for color mapping
-          float h = (vElevation + 4.0) / 8.0;
-          h = clamp(h, 0.0, 1.0);
+            // Pulsing brightness
+            float pulse = 0.7 + 0.3 * sin(uTime * uPulseSpeed + vUv.y * 4.0);
 
-          // Color gradient based on wave height
-          vec3 color = mix(uColorDeep, uColorMid, smoothstep(0.0, 0.4, h));
-          color = mix(color, uColorPeak, smoothstep(0.4, 0.7, h));
-          color = mix(color, uColorFoam, smoothstep(0.75, 1.0, h));
+            // Traveling light effect going upward
+            float travel = sin(vUv.y * 10.0 - uTime * 1.5) * 0.5 + 0.5;
+            travel = pow(travel, 3.0) * 0.3;
 
-          // Subtle shimmer on peaks
-          float shimmer = sin(vWorldPos.x * 2.0 + uTime * 2.0) *
-                          sin(vWorldPos.z * 2.5 + uTime * 1.5) * 0.5 + 0.5;
-          color += uColorFoam * shimmer * smoothstep(0.6, 1.0, h) * 0.15;
+            float alpha = vertFade * horizFade * pulse * uOpacity + travel * vertFade * horizFade * 0.05;
+            vec3 finalColor = uColor * (1.0 + travel * 0.5);
 
-          // Distance fade into fog
-          float dist = length(vWorldPos.xz) / 60.0;
-          float fogFactor = 1.0 - smoothstep(0.3, 1.0, dist);
+            gl_FragColor = vec4(finalColor, alpha);
+          }
+        `,
+        transparent: true,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      })
 
-          gl_FragColor = vec4(color, fogFactor * (0.7 + h * 0.3));
-        }
-      `,
-      transparent: true,
-      side: THREE.DoubleSide,
-      depthWrite: false,
-    })
+      const pillar = new THREE.Mesh(geo, mat)
 
-    const ocean = new THREE.Mesh(geometry, material)
-    scene.add(ocean)
+      // Distribute around the scene
+      const angle = (i / pillarCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.5
+      const radius = 5 + Math.random() * 18
+      const x = Math.cos(angle) * radius
+      const z = Math.sin(angle) * radius - 5
 
-    // --- Wireframe overlay (subtle grid on waves) ---
-    const wireMat = new THREE.ShaderMaterial({
-      uniforms: material.uniforms,
-      vertexShader: material.vertexShader,
-      fragmentShader: `
-        varying float vElevation;
-        varying vec3 vWorldPos;
-        void main() {
-          float h = (vElevation + 4.0) / 8.0;
-          h = clamp(h, 0.0, 1.0);
-          vec3 color = vec3(0.486, 0.228, 0.929);
-          float dist = length(vWorldPos.xz) / 60.0;
-          float fogFactor = 1.0 - smoothstep(0.2, 0.8, dist);
-          gl_FragColor = vec4(color, h * 0.08 * fogFactor);
-        }
-      `,
-      transparent: true,
-      wireframe: true,
-      depthWrite: false,
-    })
-    const wireOcean = new THREE.Mesh(geometry, wireMat)
-    wireOcean.position.y = 0.01
-    scene.add(wireOcean)
+      pillar.position.set(x, height * 0.35, z)
 
-    // --- Floating mist particles above waves ---
-    const pCount = 150
-    const pGeo = new THREE.BufferGeometry()
-    const pPositions = new Float32Array(pCount * 3)
-    const pVelocities: { x: number; y: number; z: number }[] = []
+      // Face camera roughly but with some rotation variation
+      pillar.lookAt(camera.position)
+      pillar.rotation.z = (Math.random() - 0.5) * 0.08
 
-    for (let i = 0; i < pCount; i++) {
-      pPositions[i * 3] = (Math.random() - 0.5) * 80
-      pPositions[i * 3 + 1] = Math.random() * 8 + 1
-      pPositions[i * 3 + 2] = (Math.random() - 0.5) * 80
-      pVelocities.push({
-        x: (Math.random() - 0.5) * 0.015,
-        y: (Math.random() - 0.5) * 0.005,
-        z: (Math.random() - 0.5) * 0.01,
+      scene.add(pillar)
+      pillars.push(pillar)
+      pillarData.push({
+        baseX: x,
+        baseZ: z,
+        speed: 0.15 + Math.random() * 0.3,
+        phase: Math.random() * Math.PI * 2,
+        height,
+        pulseSpeed: 0.5 + Math.random() * 1.5,
       })
     }
-    pGeo.setAttribute("position", new THREE.BufferAttribute(pPositions, 3))
 
-    const pMat = new THREE.PointsMaterial({
-      size: 0.08,
-      color: new THREE.Color("#c084fc"),
+    // --- Ground glow plane ---
+    const groundGeo = new THREE.PlaneGeometry(80, 80, 1, 1)
+    const groundMat = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uColor: { value: purpleDark },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float uTime;
+        uniform vec3 uColor;
+        varying vec2 vUv;
+
+        void main() {
+          float dist = length(vUv - 0.5) * 2.0;
+          float glow = 1.0 - smoothstep(0.0, 0.7, dist);
+          glow = pow(glow, 2.5);
+          float pulse = 0.8 + 0.2 * sin(uTime * 0.5);
+          gl_FragColor = vec4(uColor * 1.5, glow * 0.12 * pulse);
+        }
+      `,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    })
+    const ground = new THREE.Mesh(groundGeo, groundMat)
+    ground.rotation.x = -Math.PI / 2
+    ground.position.y = -1
+    scene.add(ground)
+
+    // --- Floating dust particles ---
+    const dustCount = 180
+    const dustGeo = new THREE.BufferGeometry()
+    const dustPos = new Float32Array(dustCount * 3)
+    const dustVel: { x: number; y: number; z: number }[] = []
+
+    for (let i = 0; i < dustCount; i++) {
+      dustPos[i * 3] = (Math.random() - 0.5) * 40
+      dustPos[i * 3 + 1] = Math.random() * 25
+      dustPos[i * 3 + 2] = (Math.random() - 0.5) * 40 - 5
+      dustVel.push({
+        x: (Math.random() - 0.5) * 0.005,
+        y: 0.005 + Math.random() * 0.015,
+        z: (Math.random() - 0.5) * 0.005,
+      })
+    }
+    dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3))
+
+    const dustMat = new THREE.PointsMaterial({
+      size: 0.06,
+      color: purpleLight,
       transparent: true,
       opacity: 0.35,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
       sizeAttenuation: true,
     })
-    const mist = new THREE.Points(pGeo, pMat)
-    scene.add(mist)
+    const dust = new THREE.Points(dustGeo, dustMat)
+    scene.add(dust)
 
-    // --- Ambient glow orbs floating above the water ---
-    const orbCount = 5
-    const orbs: THREE.Mesh[] = []
-    const orbData: { baseY: number; speed: number; radius: number; phase: number }[] = []
-
-    for (let i = 0; i < orbCount; i++) {
-      const orbGeo = new THREE.SphereGeometry(0.15 + Math.random() * 0.2, 16, 16)
-      const orbMat = new THREE.MeshBasicMaterial({
-        color: new THREE.Color().lerpColors(
-          new THREE.Color("#7c3aed"),
-          new THREE.Color("#c084fc"),
-          Math.random()
-        ),
-        transparent: true,
-        opacity: 0.12 + Math.random() * 0.08,
-        depthWrite: false,
-      })
-      const orb = new THREE.Mesh(orbGeo, orbMat)
-      const angle = (i / orbCount) * Math.PI * 2
-      const r = 10 + Math.random() * 15
-      orb.position.set(Math.cos(angle) * r, 3 + Math.random() * 4, Math.sin(angle) * r)
-      scene.add(orb)
-      orbs.push(orb)
-      orbData.push({
-        baseY: orb.position.y,
-        speed: 0.3 + Math.random() * 0.4,
-        radius: r,
-        phase: angle,
-      })
-    }
+    // --- Ambient light ---
+    const ambientLight = new THREE.AmbientLight("#1a0a2e", 0.3)
+    scene.add(ambientLight)
 
     // --- Mouse ---
     const mouse = { x: 0, y: 0 }
@@ -262,7 +220,7 @@ export default function SceneBackground() {
     window.addEventListener("scroll", onScroll, { passive: true })
     onScroll()
 
-    // --- Animate ---
+    // --- Animation ---
     const clock = new THREE.Clock()
     let frameId: number
 
@@ -271,45 +229,58 @@ export default function SceneBackground() {
       const t = clock.getElapsedTime()
       smoothScroll += (scrollTarget - smoothScroll) * 0.04
 
-      // Update uniforms
-      material.uniforms.uTime.value = t
-      material.uniforms.uScroll.value = smoothScroll
+      // Update pillar uniforms and subtle sway
+      for (let i = 0; i < pillarCount; i++) {
+        const mat = pillars[i].material as THREE.ShaderMaterial
+        mat.uniforms.uTime.value = t
+        // Increase opacity on scroll for more dramatic effect
+        mat.uniforms.uOpacity.value =
+          (0.12 + Math.random() * 0.001) + smoothScroll * 0.12
 
-      // Camera: gentle sway + scroll-driven tilt closer to waves
-      const camY = 12 - smoothScroll * 5
-      const camZ = 30 - smoothScroll * 8
-      const lookY = -2 - smoothScroll * 3
-      camera.position.x += (mouse.x * 2 - camera.position.x) * 0.01
-      camera.position.y += (camY + mouse.y * 1.5 - camera.position.y) * 0.015
-      camera.position.z += (camZ - camera.position.z) * 0.015
-      camera.lookAt(0, lookY, 0)
+        const d = pillarData[i]
+        // Gentle sway
+        pillars[i].position.x =
+          d.baseX + Math.sin(t * d.speed + d.phase) * 0.3
+        pillars[i].position.z =
+          d.baseZ + Math.cos(t * d.speed * 0.7 + d.phase) * 0.2
 
-      // Mist particles drift
-      const posArr = pGeo.attributes.position.array as Float32Array
-      for (let i = 0; i < pCount; i++) {
+        // Pillars billow slightly with scroll
+        const scrollScale = 1 + smoothScroll * 0.3
+        pillars[i].scale.y = scrollScale
+        pillars[i].scale.x = 1 + smoothScroll * 0.15
+
+        // Keep facing camera
+        pillars[i].lookAt(camera.position)
+        pillars[i].rotation.z = Math.sin(t * 0.2 + d.phase) * 0.05
+      }
+
+      // Ground glow
+      groundMat.uniforms.uTime.value = t
+
+      // Dust particles float upward
+      const dArr = dustGeo.attributes.position.array as Float32Array
+      for (let i = 0; i < dustCount; i++) {
         const idx = i * 3
-        posArr[idx] += pVelocities[i].x * (1 + smoothScroll)
-        posArr[idx + 1] += pVelocities[i].y
-        posArr[idx + 2] += pVelocities[i].z * (1 + smoothScroll)
-        // Wrap around
-        if (posArr[idx] > 40) posArr[idx] = -40
-        if (posArr[idx] < -40) posArr[idx] = 40
-        if (posArr[idx + 2] > 40) posArr[idx + 2] = -40
-        if (posArr[idx + 2] < -40) posArr[idx + 2] = 40
-        if (posArr[idx + 1] > 10) posArr[idx + 1] = 1
-        if (posArr[idx + 1] < 0.5) posArr[idx + 1] = 8
+        dArr[idx] += dustVel[i].x
+        dArr[idx + 1] += dustVel[i].y * (1 + smoothScroll * 0.5)
+        dArr[idx + 2] += dustVel[i].z
+        // Reset particles that go too high
+        if (dArr[idx + 1] > 25) {
+          dArr[idx + 1] = -1
+          dArr[idx] = (Math.random() - 0.5) * 40
+          dArr[idx + 2] = (Math.random() - 0.5) * 40 - 5
+        }
       }
-      pGeo.attributes.position.needsUpdate = true
-      pMat.opacity = 0.35 + smoothScroll * 0.2
+      dustGeo.attributes.position.needsUpdate = true
+      dustMat.opacity = 0.35 + smoothScroll * 0.25
 
-      // Floating orbs bob and orbit slowly
-      for (let i = 0; i < orbCount; i++) {
-        const d = orbData[i]
-        const angle = d.phase + t * 0.05
-        orbs[i].position.x = Math.cos(angle) * d.radius
-        orbs[i].position.z = Math.sin(angle) * d.radius
-        orbs[i].position.y = d.baseY + Math.sin(t * d.speed + d.phase) * 1.5
-      }
+      // Camera
+      const camY = 2 + smoothScroll * 3
+      const camZ = 18 - smoothScroll * 4
+      camera.position.x += (mouse.x * 1.5 - camera.position.x) * 0.015
+      camera.position.y += (camY + mouse.y * 1 - camera.position.y) * 0.015
+      camera.position.z += (camZ - camera.position.z) * 0.02
+      camera.lookAt(0, 4 + smoothScroll * 2, -3)
 
       renderer.render(scene, camera)
     }
@@ -330,14 +301,13 @@ export default function SceneBackground() {
       window.removeEventListener("scroll", onScroll)
       window.removeEventListener("resize", onResize)
       renderer.dispose()
-      geometry.dispose()
-      material.dispose()
-      wireMat.dispose()
-      pGeo.dispose()
-      pMat.dispose()
-      orbs.forEach((o) => {
-        o.geometry.dispose()
-        ;(o.material as THREE.MeshBasicMaterial).dispose()
+      dustGeo.dispose()
+      dustMat.dispose()
+      groundGeo.dispose()
+      groundMat.dispose()
+      pillars.forEach((p) => {
+        p.geometry.dispose()
+        ;(p.material as THREE.ShaderMaterial).dispose()
       })
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement)

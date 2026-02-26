@@ -94,7 +94,7 @@ export default function ExperienceSection() {
                   {/* Timeline dot */}
                   <div className="absolute left-6 top-8 z-10 hidden md:left-1/2 md:block">
                     <div className="relative -translate-x-1/2">
-                      <div className="h-4 w-4 rounded-full border-2 border-primary bg-background shadow-[0_0_12px_rgba(74,124,255,0.4)]" />
+                      <div className="h-4 w-4 rounded-full border-2 border-primary bg-background shadow-[0_0_12px_rgba(168,85,247,0.5)]" />
                     </div>
                   </div>
 
@@ -104,7 +104,7 @@ export default function ExperienceSection() {
                       isLeft ? "md:pr-0" : "md:pl-0"
                     }`}
                   >
-                    <div className="rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(74,124,255,0.06)]">
+                    <div className="rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.08)]">
                       {/* Type badge and period */}
                       <div className="mb-4 flex flex-wrap items-center gap-3">
                         <span className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
