@@ -8,23 +8,20 @@ import {
   FiSend,
   FiUser,
   FiMessageSquare,
+  FiMonitor,
 } from "react-icons/fi"
 import { FaGithub, FaLinkedinIn, FaXTwitter } from "react-icons/fa6"
 import { SiDevpost } from "react-icons/si"
 
 function CodedexIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z" />
-    </svg>
-  )
+  return <FiMonitor size={size} />
 }
 
 function DevfolioIcon({ size = 18 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M3 3h7.5l4.5 9-4.5 9H3l4.5-9L3 3zm10.5 0H21l-4.5 9 4.5 9h-7.5l4.5-9-4.5-9z" />
-    </svg>
+    <span style={{ fontSize: size, fontWeight: 700, lineHeight: 1 }} aria-hidden="true">
+      D
+    </span>
   )
 }
 
