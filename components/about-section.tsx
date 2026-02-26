@@ -81,22 +81,20 @@ export default function AboutSection() {
 
             <div className="space-y-4 text-base leading-relaxed text-muted-foreground">
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+                I'm a full-stack developer who enjoys building clean, user-friendly 
+                web applications. I primarily work with the MERN stack and love 
+                turning ideas into practical, efficient solutions. I've gained 
+                experience through freelance projects, academic work, and 
+                contributions to open-source communities.
               </p>
               <p>
-                Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt mollit
-                anim id est laborum.
+                I have recently completed my Bachelor of Computer Applications, 
+                with a 9.63/10 CGPA, at DSEU University, where I also contributed 
+                to AI research in deepfake detection using deep learning techniques.
               </p>
               <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-                quae ab illo inventore veritatis et quasi architecto beatae vitae
-                dicta sunt explicabo.
+                Beyond coding, I enjoy reading, gaming, traveling, networking, and 
+                journaling, while always exploring new ideas and technologies.
               </p>
             </div>
 

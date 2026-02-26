@@ -105,22 +105,30 @@ function ProjectCard({
 
             {/* Links */}
             <div className="mt-4 flex gap-3">
-              <a
-                href={project.github}
-                className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-secondary/60 px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
-                aria-label={`View ${project.title} on GitHub`}
-              >
-                <FiGithub />
-                Code
-              </a>
-              <a
-                href={project.live}
-                className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-primary/40 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
-                aria-label={`View ${project.title} live demo`}
-              >
-                <FiExternalLink />
-                Live
-              </a>
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-secondary/60 px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                  aria-label={`View ${project.title} on GitHub`}
+                >
+                  <FiGithub />
+                  Code
+                </a>
+              )}
+              {project.live && (
+                <a
+                  href={project.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-primary/40 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
+                  aria-label={`View ${project.title} live demo`}
+                >
+                  <FiExternalLink />
+                  Live
+                </a>
+              )}
             </div>
           </motion.div>
         </div>
