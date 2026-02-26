@@ -1,12 +1,20 @@
 "use client"
 
-import { motion, useInView } from "framer-motion"
+import { motion, useInView, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
 import { FiUser } from "react-icons/fi"
 
 export default function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
+  
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  })
+  
+  const imageY = useTransform(scrollYProgress, [0, 1], [60, -60])
+  const textY = useTransform(scrollYProgress, [0, 1], [40, -40])
 
   return (
     <section
@@ -33,11 +41,12 @@ export default function AboutSection() {
 
         {/* Content grid */}
         <div className="grid items-center gap-8 sm:gap-12 md:grid-cols-2 md:gap-16">
-          {/* Image placeholder - slides in from left */}
+          {/* Image placeholder - slides in from left with parallax */}
           <motion.div
             initial={{ opacity: 0, x: -60 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            style={{ y: imageY }}
           >
             <div className="group relative">
               {/* Decorative border offset */}
@@ -68,11 +77,12 @@ export default function AboutSection() {
             </div>
           </motion.div>
 
-          {/* Description - slides in from right */}
+          {/* Description - slides in from right with parallax */}
           <motion.div
             initial={{ opacity: 0, x: 60 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.35 }}
+            style={{ y: textY }}
             className="flex flex-col gap-6"
           >
             <h3 className="text-xl font-semibold text-foreground sm:text-2xl">
@@ -81,22 +91,20 @@ export default function AboutSection() {
 
             <div className="space-y-4 text-base leading-relaxed text-muted-foreground">
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+                I'm a full-stack developer who enjoys building clean, user-friendly 
+                web applications. I primarily work with the MERN stack and love 
+                turning ideas into practical, efficient solutions. I've gained 
+                experience through freelance projects, academic work, and 
+                contributions to open-source communities.
               </p>
               <p>
-                Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt mollit
-                anim id est laborum.
+                I have recently completed my Bachelor of Computer Applications, 
+                with a 9.63/10 CGPA, at DSEU University, where I also contributed 
+                to AI research in deepfake detection using deep learning techniques.
               </p>
               <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-                quae ab illo inventore veritatis et quasi architecto beatae vitae
-                dicta sunt explicabo.
+                Beyond coding, I enjoy reading, gaming, traveling, networking, and 
+                journaling, while always exploring new ideas and technologies.
               </p>
             </div>
 

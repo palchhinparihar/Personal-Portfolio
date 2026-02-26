@@ -1,29 +1,24 @@
 "use client"
 
-import { motion, useInView, AnimatePresence } from "framer-motion"
+import { motion, useInView, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { useRef, useState } from "react"
 import {
   SiJavascript,
-  SiTypescript,
   SiPython,
   SiCplusplus,
+  SiC,
   SiReact,
-  SiNextdotjs,
   SiTailwindcss,
-  SiVuedotjs,
-  SiFramer,
+  SiBootstrap,
   SiNodedotjs,
   SiExpress,
   SiMongodb,
-  SiPostgresql,
   SiGit,
-  SiDocker,
-  SiFigma,
-  SiVercel,
+  SiGithub,
+  SiNetlify,
   SiHtml5,
   SiCss3,
 } from "react-icons/si"
-import { VscCode } from "react-icons/vsc"
 import { FiCode, FiLayout, FiServer, FiTool } from "react-icons/fi"
 
 const categories = [
@@ -32,12 +27,10 @@ const categories = [
     label: "Languages",
     icon: FiCode,
     skills: [
-      { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },
-      { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
-      { name: "Python", icon: SiPython, color: "#3776AB" },
+      { name: "C", icon: SiC, color: "#A8B9CC" },
       { name: "C++", icon: SiCplusplus, color: "#00599C" },
-      { name: "HTML5", icon: SiHtml5, color: "#E34F26" },
-      { name: "CSS3", icon: SiCss3, color: "#1572B6" },
+      { name: "Python", icon: SiPython, color: "#3776AB" },
+      { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },
     ],
   },
   {
@@ -45,11 +38,11 @@ const categories = [
     label: "Frontend",
     icon: FiLayout,
     skills: [
+      { name: "HTML5", icon: SiHtml5, color: "#E34F26" },
+      { name: "CSS3", icon: SiCss3, color: "#1572B6" },
       { name: "React", icon: SiReact, color: "#61DAFB" },
-      { name: "Next.js", icon: SiNextdotjs, color: "#FFFFFF" },
       { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4" },
-      { name: "Vue.js", icon: SiVuedotjs, color: "#4FC08D" },
-      { name: "Framer Motion", icon: SiFramer, color: "#BB4BFF" },
+      { name: "Bootstrap", icon: SiBootstrap, color: "#7952B3" },
     ],
   },
   {
@@ -60,7 +53,6 @@ const categories = [
       { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
       { name: "Express.js", icon: SiExpress, color: "#FFFFFF" },
       { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
-      { name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1" },
     ],
   },
   {
@@ -69,10 +61,8 @@ const categories = [
     icon: FiTool,
     skills: [
       { name: "Git", icon: SiGit, color: "#F05032" },
-      { name: "Docker", icon: SiDocker, color: "#2496ED" },
-      { name: "Figma", icon: SiFigma, color: "#F24E1E" },
-      { name: "VS Code", icon: VscCode, color: "#007ACC" },
-      { name: "Vercel", icon: SiVercel, color: "#FFFFFF" },
+      { name: "GitHub", icon: SiGithub, color: "#FFFFFF" },
+      { name: "Netlify", icon: SiNetlify, color: "#00C7B7" },
     ],
   },
 ]
@@ -81,6 +71,14 @@ export default function SkillsSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
   const [activeTab, setActiveTab] = useState("languages")
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  })
+  
+  const headingY = useTransform(scrollYProgress, [0, 1], [30, -30])
+  const gridY = useTransform(scrollYProgress, [0, 1], [50, -50])
 
   const activeCategory = categories.find((c) => c.key === activeTab)
 
@@ -96,6 +94,7 @@ export default function SkillsSection() {
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: "easeOut" }}
+          style={{ y: headingY }}
           className="mb-16 text-center"
         >
           <span className="mb-3 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium tracking-widest uppercase text-primary">
@@ -144,16 +143,17 @@ export default function SkillsSection() {
         </motion.div>
 
         {/* Skills display */}
-        <AnimatePresence mode="wait">
-          {activeCategory && (
-            <motion.div
-              key={activeCategory.key}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-              className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
-            >
+        <motion.div style={{ y: gridY }}>
+          <AnimatePresence mode="wait">
+            {activeCategory && (
+              <motion.div
+                key={activeCategory.key}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="flex flex-wrap justify-center gap-3 sm:gap-4"
+              >
               {activeCategory.skills.map((skill, i) => {
                 const SkillIcon = skill.icon
                 return (
@@ -166,7 +166,7 @@ export default function SkillsSection() {
                       delay: i * 0.06,
                       ease: "easeOut",
                     }}
-                    className="group flex cursor-pointer flex-col items-center gap-2 rounded-2xl border border-border bg-card/60 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(147,51,234,0.08)] sm:gap-3 sm:p-6"
+                    className="group flex w-[calc(50%-0.375rem)] cursor-pointer flex-col items-center gap-2 rounded-2xl border border-border bg-card/60 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(147,51,234,0.08)] sm:w-auto sm:min-w-[140px] sm:gap-3 sm:p-6"
                   >
                     <div
                       className="flex h-14 w-14 items-center justify-center rounded-xl border border-border bg-secondary/40 transition-all duration-300 group-hover:border-transparent group-hover:shadow-[0_0_20px_var(--glow)]"
@@ -185,9 +185,10 @@ export default function SkillsSection() {
                   </motion.div>
                 )
               })}
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   )

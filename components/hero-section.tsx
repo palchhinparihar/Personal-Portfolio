@@ -1,23 +1,20 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { FiFileText, FiSend } from "react-icons/fi"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { useRef } from "react"
+import { FiFileText, FiSend, FiMonitor } from "react-icons/fi"
 import { FaGithub, FaLinkedinIn, FaXTwitter } from "react-icons/fa6"
 import { SiDevpost } from "react-icons/si"
 
 function CodedexIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z" />
-    </svg>
-  )
+  return <FiMonitor size={size} />
 }
 
 function DevfolioIcon({ size = 18 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M3 3h7.5l4.5 9-4.5 9H3l4.5-9L3 3zm10.5 0H21l-4.5 9 4.5 9h-7.5l4.5-9-4.5-9z" />
-    </svg>
+    <span style={{ fontSize: size, fontWeight: 700, lineHeight: 1 }} aria-hidden="true">
+      D
+    </span>
   )
 }
 
@@ -51,8 +48,19 @@ const socialLinks = [
 ]
 
 export default function HeroSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  })
+
+  const y = useTransform(scrollYProgress, [0, 1], [0, 150])
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95])
+
   return (
     <section
+      ref={sectionRef}
       id="home"
       className="relative flex min-h-screen items-center justify-center px-4 sm:px-6"
     >
@@ -60,6 +68,7 @@ export default function HeroSection() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
+        style={{ y, opacity, scale }}
         className="relative z-10 mx-auto max-w-3xl text-center"
       >
         {/* Greeting tag */}
