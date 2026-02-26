@@ -7,6 +7,7 @@ import AboutSection from "@/components/about-section"
 import ExperienceSection from "@/components/experience-section"
 import SkillsSection from "@/components/skills-section"
 import ProjectsSection from "@/components/projects-section"
+import ContactSection from "@/components/contact-section"
 
 const SceneBackground = dynamic(
   () => import("@/components/scene-background"),
@@ -23,6 +24,7 @@ export default function Home() {
       <ExperienceSection />
       <SkillsSection />
       <ProjectsSection />
+      <ContactSection />
     </main>
   )
 }
