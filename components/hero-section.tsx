@@ -99,7 +99,7 @@ export default function HeroSection() {
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.97 }}
-            className="group flex cursor-pointer items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-[0_0_30px_rgba(147,51,234,0.35)]"
+            className="group flex cursor-pointer items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-[0_0_35px_rgba(168,85,247,0.45)]"
           >
             <FiFileText className="text-lg transition-transform group-hover:-rotate-6" />
             View Resume
@@ -109,7 +109,7 @@ export default function HeroSection() {
             href="#contact"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.97 }}
-            className="group flex cursor-pointer items-center gap-2 rounded-lg border border-border bg-secondary/60 px-6 py-3 text-sm font-semibold text-secondary-foreground backdrop-blur-sm transition-all hover:border-primary/50 hover:shadow-[0_0_30px_rgba(147,51,234,0.15)]"
+            className="group flex cursor-pointer items-center gap-2 rounded-lg border border-border bg-secondary/60 px-6 py-3 text-sm font-semibold text-secondary-foreground backdrop-blur-sm transition-all hover:border-primary/50 hover:shadow-[0_0_35px_rgba(168,85,247,0.2)]"
           >
             <FiSend className="text-lg transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             Connect
@@ -130,7 +130,7 @@ export default function HeroSection() {
               aria-label={social.label}
               whileHover={{ scale: 1.2, y: -3 }}
               whileTap={{ scale: 0.9 }}
-              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-border bg-secondary/40 text-muted-foreground transition-all hover:border-primary/50 hover:text-foreground hover:shadow-[0_0_15px_rgba(147,51,234,0.2)]"
+              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-border bg-secondary/40 text-muted-foreground transition-all hover:border-primary/50 hover:text-foreground hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]"
             >
               {social.isCustom ? (
                 <social.icon size={18} />
