@@ -6,62 +6,32 @@ import { FiExternalLink, FiGithub, FiImage } from "react-icons/fi"
 
 const projects = [
   {
-    title: "Project Alpha",
+    title: "DeepShield",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
-    tags: ["React", "Node.js", "MongoDB"],
-    github: "#",
-    live: "#",
+      "An AI-powered cybersecurity tool that detects deepfake videos in real-time using machine learning algorithms.",
+    tags: ["Python", "TensorFlow", "React.js", "Tailwind CSS"],
+    github: "https://github.com/palchhinparihar/DeepShield",
+    live: "https://player.cloudinary.com/embed/?cloud_name=deffdyr0p&public_id=DeepShieldDemoVideo_ilyil4&profile=cld-default",
     span: "col-span-1 sm:col-span-2 row-span-2",
     aspect: "aspect-[4/3]",
   },
   {
-    title: "Project Beta",
+    title: "Discord Automation Bot",
     description:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.",
-    tags: ["Next.js", "Tailwind", "Prisma"],
-    github: "#",
-    live: "#",
+      "A Python-based Discord bot that listens for custom commands and responds with random content (e.g., memes, jokes, text) using public APIs.",
+    tags: ["Python", "Discord.py", "REST APIs"],
+    github: "https://github.com/palchhinparihar/Discord-Bot",
+    live: "",
     span: "col-span-1 row-span-1",
     aspect: "aspect-square",
   },
   {
-    title: "Project Gamma",
+    title: "Personal Password Manager",
     description:
-      "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.",
-    tags: ["TypeScript", "Firebase", "Stripe"],
-    github: "#",
-    live: "#",
-    span: "col-span-1 row-span-1",
-    aspect: "aspect-square",
-  },
-  {
-    title: "Project Delta",
-    description:
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque.",
-    tags: ["Vue.js", "Express", "PostgreSQL"],
-    github: "#",
-    live: "#",
-    span: "col-span-1 row-span-1",
-    aspect: "aspect-square",
-  },
-  {
-    title: "Project Epsilon",
-    description:
-      "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.",
-    tags: ["React Native", "GraphQL", "AWS"],
-    github: "#",
-    live: "#",
-    span: "col-span-1 sm:col-span-2 row-span-1",
-    aspect: "aspect-[2/1]",
-  },
-  {
-    title: "Project Zeta",
-    description:
-      "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis.",
-    tags: ["Python", "Flask", "Docker"],
-    github: "#",
-    live: "#",
+      "A Python-based CLI password manager that securely stores your credentials using Fernet encryption.",
+    tags: ["Python", "Cryptography", "Fernet Encryption"],
+    github: "https://github.com/palchhinparihar/Personal-Password-Manager",
+    live: "https://youtu.be/zoZQaFsP-bM?si=68YSB3us6WLXFDRj",
     span: "col-span-1 row-span-1",
     aspect: "aspect-square",
   },

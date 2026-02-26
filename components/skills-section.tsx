@@ -4,26 +4,21 @@ import { motion, useInView, AnimatePresence } from "framer-motion"
 import { useRef, useState } from "react"
 import {
   SiJavascript,
-  SiTypescript,
   SiPython,
   SiCplusplus,
+  SiC,
   SiReact,
-  SiNextdotjs,
   SiTailwindcss,
-  SiVuedotjs,
-  SiFramer,
+  SiBootstrap,
   SiNodedotjs,
   SiExpress,
   SiMongodb,
-  SiPostgresql,
   SiGit,
-  SiDocker,
-  SiFigma,
-  SiVercel,
+  SiGithub,
+  SiNetlify,
   SiHtml5,
   SiCss3,
 } from "react-icons/si"
-import { VscCode } from "react-icons/vsc"
 import { FiCode, FiLayout, FiServer, FiTool } from "react-icons/fi"
 
 const categories = [
@@ -32,12 +27,10 @@ const categories = [
     label: "Languages",
     icon: FiCode,
     skills: [
-      { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },
-      { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
-      { name: "Python", icon: SiPython, color: "#3776AB" },
+      { name: "C", icon: SiC, color: "#A8B9CC" },
       { name: "C++", icon: SiCplusplus, color: "#00599C" },
-      { name: "HTML5", icon: SiHtml5, color: "#E34F26" },
-      { name: "CSS3", icon: SiCss3, color: "#1572B6" },
+      { name: "Python", icon: SiPython, color: "#3776AB" },
+      { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },
     ],
   },
   {
@@ -45,11 +38,11 @@ const categories = [
     label: "Frontend",
     icon: FiLayout,
     skills: [
+      { name: "HTML5", icon: SiHtml5, color: "#E34F26" },
+      { name: "CSS3", icon: SiCss3, color: "#1572B6" },
       { name: "React", icon: SiReact, color: "#61DAFB" },
-      { name: "Next.js", icon: SiNextdotjs, color: "#FFFFFF" },
       { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4" },
-      { name: "Vue.js", icon: SiVuedotjs, color: "#4FC08D" },
-      { name: "Framer Motion", icon: SiFramer, color: "#BB4BFF" },
+      { name: "Bootstrap", icon: SiBootstrap, color: "#7952B3" },
     ],
   },
   {
@@ -60,7 +53,6 @@ const categories = [
       { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
       { name: "Express.js", icon: SiExpress, color: "#FFFFFF" },
       { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
-      { name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1" },
     ],
   },
   {
@@ -69,10 +61,8 @@ const categories = [
     icon: FiTool,
     skills: [
       { name: "Git", icon: SiGit, color: "#F05032" },
-      { name: "Docker", icon: SiDocker, color: "#2496ED" },
-      { name: "Figma", icon: SiFigma, color: "#F24E1E" },
-      { name: "VS Code", icon: VscCode, color: "#007ACC" },
-      { name: "Vercel", icon: SiVercel, color: "#FFFFFF" },
+      { name: "GitHub", icon: SiGithub, color: "#FFFFFF" },
+      { name: "Netlify", icon: SiNetlify, color: "#00C7B7" },
     ],
   },
 ]

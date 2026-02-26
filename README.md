@@ -1,23 +1,30 @@
 # Palchhin's Personal Portfolio
 
-A modern, animated personal portfolio website showcasing my skills, projects, and experience as a developer.
+A modern, animated personal portfolio website showcasing my skills, projects, and experience as a Full-Stack Developer.
 
 ## About Me
 
-Hi, I'm Palchhin - a passionate developer crafting beautiful, performant, and accessible web experiences. I specialize in turning ideas into reality, one pixel at a time. With 2+ years of experience, I've worked on 10+ projects across a diverse tech stack.
+Hi, I'm Palchhin - a passionate Full-Stack Developer (MERN) and University Researcher from DSEU University. I specialize in building performant, accessible web applications and have contributed extensively to open-source projects. My experience spans freelancing, research in AI/ML (deepfake detection), and community volunteering.
+
+### Highlights
+- Open Source Maintainer (WordWizard) - Managed 40+ contributions during Hacktoberfest 2025
+- Top 15 Contributor at Code Social (WOCS) with 19+ pull requests
+- University Researcher - Built deepfake detection models achieving 82% accuracy
+- Freelance Projects - E-commerce platforms, portfolio websites, and business sites
 
 ## Tech Stack
 
 ### Languages
-- JavaScript / TypeScript
-- Python
+- C
 - C++
-- HTML5 / CSS3
+- Python
+- JavaScript
 
 ### Frontend
+- **HTML5 / CSS3** - Web fundamentals
 - **React** - UI library
-- **Next.js 16** - React framework with App Router
-- **Tailwind CSS v4** - Utility-first CSS framework
+- **Tailwind CSS** - Utility-first CSS framework
+- **Bootstrap** - CSS framework
 - **Framer Motion** - Animation library
 - **shadcn/ui** - Component library built on Radix UI
 
@@ -25,13 +32,11 @@ Hi, I'm Palchhin - a passionate developer crafting beautiful, performant, and ac
 - Node.js
 - Express.js
 - MongoDB
-- PostgreSQL
 
 ### Tools & Platforms
 - Git
-- Docker
-- Figma
-- VS Code
+- GitHub
+- Netlify
 - Vercel
 
 ## Features
