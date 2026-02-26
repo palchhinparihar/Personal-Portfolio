@@ -49,8 +49,8 @@ export default function Footer() {
       ref={footerRef}
       className="relative z-10 border-t border-border bg-card/30 backdrop-blur-sm"
     >
-      <div className="mx-auto max-w-6xl px-6 py-12 md:py-16">
-        <div className="grid gap-10 md:grid-cols-3">
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 md:py-16">
+        <div className="grid gap-8 sm:gap-10 md:grid-cols-3">
           {/* Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

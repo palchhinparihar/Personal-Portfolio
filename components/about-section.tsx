@@ -12,7 +12,7 @@ export default function AboutSection() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative z-10 px-6 py-24 md:py-32"
+      className="relative z-10 px-4 py-16 sm:px-6 md:py-32"
     >
       <div className="mx-auto max-w-5xl">
         {/* Section heading */}
@@ -25,14 +25,14 @@ export default function AboutSection() {
           <span className="mb-3 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium tracking-widest uppercase text-primary">
             About Me
           </span>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl text-balance">
+          <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-5xl text-balance">
             My Journey
           </h2>
           <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-primary/60" />
         </motion.div>
 
         {/* Content grid */}
-        <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
+        <div className="grid items-center gap-8 sm:gap-12 md:grid-cols-2 md:gap-16">
           {/* Image placeholder - slides in from left */}
           <motion.div
             initial={{ opacity: 0, x: -60 }}
@@ -105,7 +105,7 @@ export default function AboutSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.6 }}
-              className="mt-2 grid grid-cols-3 gap-4"
+              className="mt-2 grid grid-cols-3 gap-2 sm:gap-4"
             >
               {[
                 { value: "2+", label: "Years Exp." },
@@ -114,7 +114,7 @@ export default function AboutSection() {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="cursor-pointer rounded-xl border border-border bg-card/60 p-4 text-center backdrop-blur-sm transition-colors hover:border-primary/30"
+                  className="cursor-pointer rounded-xl border border-border bg-card/60 p-3 text-center backdrop-blur-sm transition-colors hover:border-primary/30 sm:p-4"
                 >
                   <p className="text-2xl font-bold text-primary">{stat.value}</p>
                   <p className="mt-1 text-xs font-medium text-muted-foreground">

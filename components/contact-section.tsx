@@ -76,7 +76,7 @@ export default function ContactSection() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative z-10 px-6 py-24 md:py-32"
+      className="relative z-10 px-4 py-16 sm:px-6 md:py-32"
     >
       <div className="mx-auto max-w-5xl">
         {/* Section heading */}
@@ -89,7 +89,7 @@ export default function ContactSection() {
           <span className="mb-3 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium tracking-widest uppercase text-primary">
             Get In Touch
           </span>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl text-balance">
+          <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-5xl text-balance">
             Contact
           </h2>
           <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-primary/60" />
@@ -99,7 +99,7 @@ export default function ContactSection() {
           </p>
         </motion.div>
 
-        <div className="grid items-start gap-10 lg:grid-cols-5">
+        <div className="grid items-start gap-8 sm:gap-10 lg:grid-cols-5">
           {/* Left -- info & socials */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -171,7 +171,7 @@ export default function ContactSection() {
             initial={{ opacity: 0, x: 40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
-            className="flex flex-col gap-5 rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-sm sm:p-8 lg:col-span-3"
+            className="flex flex-col gap-4 rounded-2xl border border-border bg-card/60 p-5 backdrop-blur-sm sm:gap-5 sm:p-8 lg:col-span-3"
           >
             {/* Name */}
             <div className="flex flex-col gap-2">

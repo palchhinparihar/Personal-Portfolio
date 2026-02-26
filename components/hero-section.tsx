@@ -54,7 +54,7 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="relative flex min-h-screen items-center justify-center px-6"
+      className="relative flex min-h-screen items-center justify-center px-4 sm:px-6"
     >
       <motion.div
         variants={containerVariants}
@@ -72,7 +72,7 @@ export default function HeroSection() {
         {/* Main heading */}
         <motion.h1
           variants={itemVariants}
-          className="mb-4 text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl text-balance"
+          className="mb-4 text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-7xl text-balance"
         >
           Hi, <span className="text-primary">Palchhin</span> here
           <span className="text-accent">~</span>
@@ -99,7 +99,7 @@ export default function HeroSection() {
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.97 }}
-            className="group flex cursor-pointer items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-[0_0_35px_rgba(168,85,247,0.45)]"
+            className="group flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-[0_0_35px_rgba(168,85,247,0.45)] sm:px-6"
           >
             <FiFileText className="text-lg transition-transform group-hover:-rotate-6" />
             View Resume
@@ -109,7 +109,7 @@ export default function HeroSection() {
             href="#contact"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.97 }}
-            className="group flex cursor-pointer items-center gap-2 rounded-lg border border-border bg-secondary/60 px-6 py-3 text-sm font-semibold text-secondary-foreground backdrop-blur-sm transition-all hover:border-primary/50 hover:shadow-[0_0_35px_rgba(168,85,247,0.2)]"
+            className="group flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-border bg-secondary/60 px-5 py-3 text-sm font-semibold text-secondary-foreground backdrop-blur-sm transition-all hover:border-primary/50 hover:shadow-[0_0_35px_rgba(168,85,247,0.2)] sm:px-6"
           >
             <FiSend className="text-lg transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             Connect
@@ -119,7 +119,7 @@ export default function HeroSection() {
         {/* Social links */}
         <motion.div
           variants={itemVariants}
-          className="mt-12 flex items-center justify-center gap-4"
+          className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:mt-12 sm:gap-4"
         >
           {socialLinks.map((social) => (
             <motion.a
@@ -146,7 +146,7 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2, duration: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 md:bottom-12"
+          className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 sm:block md:bottom-12"
         >
           <motion.div
             animate={{ y: [0, 10, 0] }}

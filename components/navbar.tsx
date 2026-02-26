@@ -21,7 +21,7 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
     }
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
@@ -30,79 +30,91 @@ export default function Navbar() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-background/80 backdrop-blur-xl border-b border-border"
-          : "bg-transparent"
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center"
     >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <motion.a
-          href="#home"
-          className="cursor-pointer text-xl font-semibold tracking-tight text-foreground"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {"<"}
-          <span className="text-primary">Palchhin</span>
-          {" />"}
-        </motion.a>
-
-        {/* Desktop nav */}
-        <ul className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <li key={link.label}>
-              <a
-                href={link.href}
-                className="relative cursor-pointer text-sm font-medium text-muted-foreground transition-colors hover:text-foreground group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full" />
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        {/* Mobile toggle */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="cursor-pointer text-foreground md:hidden"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-        >
-          {mobileOpen ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
-        </button>
-      </nav>
-
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-b border-border bg-background/95 backdrop-blur-xl md:hidden"
+      {/* Outer wrapper -- handles width + border-radius transition */}
+      <motion.div
+        animate={{
+          maxWidth: scrolled ? 720 : 1200,
+          borderRadius: scrolled ? 999 : 0,
+        }}
+        transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+        className={`w-full transition-all duration-400 ${
+          scrolled
+            ? "mt-3 border border-border bg-background/70 shadow-lg shadow-primary/5 backdrop-blur-xl"
+            : "bg-transparent"
+        }`}
+      >
+        <nav className="flex items-center justify-between px-5 py-3 sm:px-6">
+          {/* Brand */}
+          <motion.a
+            href="#home"
+            className="cursor-pointer text-lg font-semibold tracking-tight text-foreground sm:text-xl"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <ul className="flex flex-col gap-4 px-6 py-6">
-              {navLinks.map((link, i) => (
-                <motion.li
-                  key={link.label}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
+            {"<"}
+            <span className="text-primary">Palchhin</span>
+            {" />"}
+          </motion.a>
+
+          {/* Desktop nav */}
+          <ul className="hidden items-center gap-6 lg:flex">
+            {navLinks.map((link) => (
+              <li key={link.label}>
+                <a
+                  href={link.href}
+                  className="relative cursor-pointer text-sm font-medium text-muted-foreground transition-colors hover:text-foreground group"
                 >
-                  <a
-                    href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="cursor-pointer text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full" />
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          {/* Mobile toggle */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="cursor-pointer text-foreground lg:hidden"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          >
+            {mobileOpen ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
+          </button>
+        </nav>
+
+        {/* Mobile menu */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden border-t border-border bg-background/95 backdrop-blur-xl lg:hidden"
+              style={{ borderRadius: scrolled ? "0 0 24px 24px" : 0 }}
+            >
+              <ul className="flex flex-col gap-3 px-5 py-5">
+                {navLinks.map((link, i) => (
+                  <motion.li
+                    key={link.label}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.07 }}
                   >
-                    {link.label}
-                  </a>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                    <a
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="cursor-pointer text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {link.label}
+                    </a>
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </motion.header>
   )
 }

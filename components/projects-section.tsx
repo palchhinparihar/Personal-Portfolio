@@ -192,7 +192,7 @@ export default function ProjectsSection() {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative z-10 px-6 py-24 md:py-32"
+      className="relative z-10 px-4 py-16 sm:px-6 md:py-32"
     >
       <div className="mx-auto max-w-5xl">
         {/* Section heading */}
@@ -205,7 +205,7 @@ export default function ProjectsSection() {
           <span className="mb-3 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium tracking-widest uppercase text-primary">
             Portfolio
           </span>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl text-balance">
+          <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-5xl text-balance">
             Projects
           </h2>
           <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-primary/60" />

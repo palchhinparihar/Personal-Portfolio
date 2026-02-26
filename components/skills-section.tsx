@@ -88,7 +88,7 @@ export default function SkillsSection() {
     <section
       ref={sectionRef}
       id="skills"
-      className="relative z-10 px-6 py-24 md:py-32"
+      className="relative z-10 px-4 py-16 sm:px-6 md:py-32"
     >
       <div className="mx-auto max-w-5xl">
         {/* Section heading */}
@@ -101,7 +101,7 @@ export default function SkillsSection() {
           <span className="mb-3 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium tracking-widest uppercase text-primary">
             What I Know
           </span>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl text-balance">
+          <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-5xl text-balance">
             Skills
           </h2>
           <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-primary/60" />
@@ -112,7 +112,7 @@ export default function SkillsSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-12 flex flex-wrap items-center justify-center gap-3"
+          className="mb-8 flex flex-wrap items-center justify-center gap-2 sm:mb-12 sm:gap-3"
         >
           {categories.map((cat) => {
             const Icon = cat.icon
@@ -121,7 +121,7 @@ export default function SkillsSection() {
               <button
                 key={cat.key}
                 onClick={() => setActiveTab(cat.key)}
-                className={`relative flex cursor-pointer items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
+                className={`relative flex cursor-pointer items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-medium transition-all duration-300 sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm ${
                   isActive
                     ? "text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground bg-secondary/40 hover:bg-secondary/70"
@@ -152,7 +152,7 @@ export default function SkillsSection() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.35, ease: "easeOut" }}
-              className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+              className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
             >
               {activeCategory.skills.map((skill, i) => {
                 const SkillIcon = skill.icon
@@ -166,7 +166,7 @@ export default function SkillsSection() {
                       delay: i * 0.06,
                       ease: "easeOut",
                     }}
-                    className="group flex cursor-pointer flex-col items-center gap-3 rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(147,51,234,0.08)]"
+                    className="group flex cursor-pointer flex-col items-center gap-2 rounded-2xl border border-border bg-card/60 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(147,51,234,0.08)] sm:gap-3 sm:p-6"
                   >
                     <div
                       className="flex h-14 w-14 items-center justify-center rounded-xl border border-border bg-secondary/40 transition-all duration-300 group-hover:border-transparent group-hover:shadow-[0_0_20px_var(--glow)]"
