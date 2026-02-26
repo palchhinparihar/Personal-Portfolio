@@ -152,7 +152,7 @@ export default function SkillsSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
-                className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
+                className="flex flex-wrap justify-center gap-3 sm:gap-4"
               >
               {activeCategory.skills.map((skill, i) => {
                 const SkillIcon = skill.icon
@@ -166,7 +166,7 @@ export default function SkillsSection() {
                       delay: i * 0.06,
                       ease: "easeOut",
                     }}
-                    className="group flex cursor-pointer flex-col items-center gap-2 rounded-2xl border border-border bg-card/60 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(147,51,234,0.08)] sm:gap-3 sm:p-6"
+                    className="group flex w-[calc(50%-0.375rem)] cursor-pointer flex-col items-center gap-2 rounded-2xl border border-border bg-card/60 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(147,51,234,0.08)] sm:w-auto sm:min-w-[140px] sm:gap-3 sm:p-6"
                   >
                     <div
                       className="flex h-14 w-14 items-center justify-center rounded-xl border border-border bg-secondary/40 transition-all duration-300 group-hover:border-transparent group-hover:shadow-[0_0_20px_var(--glow)]"
