@@ -121,7 +121,7 @@ export default function SkillsSection() {
               <button
                 key={cat.key}
                 onClick={() => setActiveTab(cat.key)}
-                className={`relative flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
+                className={`relative flex cursor-pointer items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
                   isActive
                     ? "text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground bg-secondary/40 hover:bg-secondary/70"
@@ -166,7 +166,7 @@ export default function SkillsSection() {
                       delay: i * 0.06,
                       ease: "easeOut",
                     }}
-                    className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(74,124,255,0.08)]"
+                    className="group flex cursor-pointer flex-col items-center gap-3 rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(147,51,234,0.08)]"
                   >
                     <div
                       className="flex h-14 w-14 items-center justify-center rounded-xl border border-border bg-secondary/40 transition-all duration-300 group-hover:border-transparent group-hover:shadow-[0_0_20px_var(--glow)]"

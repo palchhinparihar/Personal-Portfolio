@@ -114,7 +114,7 @@ export default function AboutSection() {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-xl border border-border bg-card/60 p-4 text-center backdrop-blur-sm transition-colors hover:border-primary/30"
+                  className="cursor-pointer rounded-xl border border-border bg-card/60 p-4 text-center backdrop-blur-sm transition-colors hover:border-primary/30"
                 >
                   <p className="text-2xl font-bold text-primary">{stat.value}</p>
                   <p className="mt-1 text-xs font-medium text-muted-foreground">

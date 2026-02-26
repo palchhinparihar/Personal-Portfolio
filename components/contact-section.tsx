@@ -10,6 +10,23 @@ import {
   FiMessageSquare,
 } from "react-icons/fi"
 import { FaGithub, FaLinkedinIn, FaXTwitter } from "react-icons/fa6"
+import { SiDevpost } from "react-icons/si"
+
+function CodedexIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z" />
+    </svg>
+  )
+}
+
+function DevfolioIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M3 3h7.5l4.5 9-4.5 9H3l4.5-9L3 3zm10.5 0H21l-4.5 9 4.5 9h-7.5l4.5-9-4.5-9z" />
+    </svg>
+  )
+}
 
 const contactInfo = [
   {
@@ -29,7 +46,10 @@ const contactInfo = [
 const socials = [
   { icon: FaGithub, label: "GitHub", href: "https://github.com" },
   { icon: FaLinkedinIn, label: "LinkedIn", href: "https://linkedin.com" },
-  { icon: FaXTwitter, label: "X / Twitter", href: "https://x.com" },
+  { icon: FaXTwitter, label: "Twitter", href: "https://x.com" },
+  { icon: CodedexIcon, label: "Codedex", href: "https://codedex.io", isCustom: true },
+  { icon: SiDevpost, label: "Devpost", href: "https://devpost.com" },
+  { icon: DevfolioIcon, label: "Devfolio", href: "https://devfolio.co", isCustom: true },
 ]
 
 export default function ContactSection() {
@@ -75,7 +95,7 @@ export default function ContactSection() {
           <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-primary/60" />
           <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-muted-foreground">
             Have a project in mind or just want to say hi? Drop me a message and
-            I'll get back to you as soon as possible.
+            I{"'"}ll get back to you as soon as possible.
           </p>
         </motion.div>
 
@@ -99,7 +119,7 @@ export default function ContactSection() {
                   <Tag
                     key={item.label}
                     {...linkProps}
-                    className="group flex items-center gap-4 rounded-2xl border border-border bg-card/60 p-5 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(74,124,255,0.06)]"
+                    className={`group flex items-center gap-4 rounded-2xl border border-border bg-card/60 p-5 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(147,51,234,0.06)] ${item.href ? "cursor-pointer" : ""}`}
                   >
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 transition-colors group-hover:border-primary/40">
                       <Icon className="text-xl text-primary" />
@@ -122,7 +142,7 @@ export default function ContactSection() {
               <p className="mb-3 text-xs font-medium tracking-wide uppercase text-muted-foreground">
                 Find me on
               </p>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 {socials.map((s, i) => {
                   const Icon = s.icon
                   return (
@@ -135,9 +155,9 @@ export default function ContactSection() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={isInView ? { opacity: 1, y: 0 } : {}}
                       transition={{ duration: 0.4, delay: 0.4 + i * 0.1 }}
-                      className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card/60 text-muted-foreground transition-all duration-300 hover:border-primary/40 hover:text-primary hover:-translate-y-0.5"
+                      className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-border bg-card/60 text-muted-foreground transition-all duration-300 hover:border-primary/40 hover:text-primary hover:-translate-y-0.5"
                     >
-                      <Icon className="text-lg" />
+                      <Icon size={18} />
                     </motion.a>
                   )
                 })}
@@ -221,7 +241,7 @@ export default function ContactSection() {
               type="submit"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-shadow duration-300 hover:shadow-[0_0_25px_rgba(74,124,255,0.3)]"
+              className="mt-2 flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-shadow duration-300 hover:shadow-[0_0_25px_rgba(147,51,234,0.3)]"
             >
               <FiSend className="text-base" />
               Send Message

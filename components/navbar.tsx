@@ -39,7 +39,7 @@ export default function Navbar() {
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <motion.a
           href="#home"
-          className="text-xl font-semibold tracking-tight text-foreground"
+          className="cursor-pointer text-xl font-semibold tracking-tight text-foreground"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -54,7 +54,7 @@ export default function Navbar() {
             <li key={link.label}>
               <a
                 href={link.href}
-                className="relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground group"
+                className="relative cursor-pointer text-sm font-medium text-muted-foreground transition-colors hover:text-foreground group"
               >
                 {link.label}
                 <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full" />
@@ -66,7 +66,7 @@ export default function Navbar() {
         {/* Mobile toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="text-foreground md:hidden"
+          className="cursor-pointer text-foreground md:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
           {mobileOpen ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
@@ -93,7 +93,7 @@ export default function Navbar() {
                   <a
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
+                    className="cursor-pointer text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {link.label}
                   </a>

@@ -137,7 +137,7 @@ function ProjectCard({
             <div className="mt-4 flex gap-3">
               <a
                 href={project.github}
-                className="flex items-center gap-1.5 rounded-lg border border-border bg-secondary/60 px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-secondary/60 px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
                 aria-label={`View ${project.title} on GitHub`}
               >
                 <FiGithub />
@@ -145,7 +145,7 @@ function ProjectCard({
               </a>
               <a
                 href={project.live}
-                className="flex items-center gap-1.5 rounded-lg border border-primary/40 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
+                className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-primary/40 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
                 aria-label={`View ${project.title} live demo`}
               >
                 <FiExternalLink />
