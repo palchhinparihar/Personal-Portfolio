@@ -12,6 +12,7 @@ const projects = [
     tags: ["Python", "TensorFlow", "React.js", "Tailwind CSS"],
     github: "https://github.com/palchhinparihar/DeepShield",
     live: "https://player.cloudinary.com/embed/?cloud_name=deffdyr0p&public_id=DeepShieldDemoVideo_ilyil4&profile=cld-default",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/deep-shield-dADU6aynOpFYiYLXX5RdwyZOxZ6PnK.png",
     span: "col-span-1 sm:col-span-2 row-span-2",
     aspect: "aspect-[4/3]",
   },
@@ -20,8 +21,9 @@ const projects = [
     description:
       "A Python-based Discord bot that listens for custom commands and responds with random content (e.g., memes, jokes, text) using public APIs.",
     tags: ["Python", "Discord.py", "REST APIs"],
-    github: "https://github.com/palchhinparihar/Discord-Bot",
+    github: "https://github.com/palchhinparihar/discord-bot",
     live: "",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/discord-bot-Od8N2JpuKaECouLr1tbWT13tq8WKDg.png",
     span: "col-span-1 row-span-1",
     aspect: "aspect-square",
   },
@@ -30,8 +32,9 @@ const projects = [
     description:
       "A Python-based CLI password manager that securely stores your credentials using Fernet encryption.",
     tags: ["Python", "Cryptography", "Fernet Encryption"],
-    github: "https://github.com/palchhinparihar/Personal-Password-Manager",
+    github: "https://github.com/palchhinparihar/personal-password-manager",
     live: "https://youtu.be/zoZQaFsP-bM?si=68YSB3us6WLXFDRj",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ppm-5B23FoRZvhiy1pietU53QCqP08KJHZ.png",
     span: "col-span-1 row-span-1",
     aspect: "aspect-square",
   },
@@ -62,18 +65,26 @@ function ProjectCard({
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card/60 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.1)]">
-        {/* Image placeholder */}
+        {/* Project Image */}
         <div
           className={`relative w-full overflow-hidden ${project.aspect}`}
         >
-          <div className="flex h-full w-full items-center justify-center bg-secondary/30">
-            <div className="flex flex-col items-center gap-2">
-              <FiImage className="text-3xl text-muted-foreground/40" />
-              <span className="text-xs text-muted-foreground/40">
-                Project Image
-              </span>
+          {project.image ? (
+            <img
+              src={project.image}
+              alt={project.title}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-secondary/30">
+              <div className="flex flex-col items-center gap-2">
+                <FiImage className="text-3xl text-muted-foreground/40" />
+                <span className="text-xs text-muted-foreground/40">
+                  Project Image
+                </span>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Hover overlay */}
           <motion.div
