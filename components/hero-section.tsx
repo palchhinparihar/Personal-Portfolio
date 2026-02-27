@@ -5,6 +5,7 @@ import { useRef } from "react"
 import { FiFileText, FiSend, FiMonitor } from "react-icons/fi"
 import { FaGithub, FaLinkedinIn, FaXTwitter } from "react-icons/fa6"
 import { SiDevpost } from "react-icons/si"
+import TypingAnimation from "./typing-animation"
 
 function CodedexIcon({ size = 18 }: { size?: number }) {
   return <FiMonitor size={size} />
@@ -78,13 +79,16 @@ export default function HeroSection() {
           </span>
         </motion.div>
 
-        {/* Main heading with handwritten style */}
+        {/* Main heading with typing animation */}
         <motion.h1
           variants={itemVariants}
           className="mb-4 font-serif text-4xl font-medium italic leading-tight tracking-wide text-foreground sm:text-5xl md:text-6xl lg:text-8xl"
         >
-          Hi, <span className="text-primary">Palchhin</span> here
-          <span className="text-accent">~</span>
+          <TypingAnimation 
+            text="Hi, Palchhin here~" 
+            typingSpeed={120}
+            startDelay={800}
+          />
         </motion.h1>
 
         {/* Tagline */}
