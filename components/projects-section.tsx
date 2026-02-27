@@ -14,7 +14,7 @@ const projects = [
     live: "https://player.cloudinary.com/embed/?cloud_name=deffdyr0p&public_id=DeepShieldDemoVideo_ilyil4&profile=cld-default",
     image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/deep-shield-dADU6aynOpFYiYLXX5RdwyZOxZ6PnK.png",
     span: "col-span-1 sm:col-span-2 row-span-2",
-    aspect: "aspect-[4/3]",
+    aspect: "aspect-10/9",
   },
   {
     title: "Discord Automation Bot",
@@ -93,7 +93,10 @@ function ProjectCard({
               opacity: isHovered ? 1 : 0,
             }}
             transition={{ duration: 0.3 }}
-            className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-background via-background/80 to-transparent p-5"
+            className="absolute inset-0 z-40 flex flex-col justify-end bg-gradient-to-t from-background via-background/80 to-transparent p-5"
+            style={{ pointerEvents: isHovered ? "auto" : "none" }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
           >
             <h3 className="text-lg font-semibold text-foreground sm:text-xl">
               {project.title}
@@ -121,7 +124,7 @@ function ProjectCard({
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-secondary/60 px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                  className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-secondary/60 px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary hover:bg-secondary/80"
                   aria-label={`View ${project.title} on GitHub`}
                 >
                   <FiGithub />
@@ -133,7 +136,7 @@ function ProjectCard({
                   href={project.live}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-primary/40 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
+                  className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-primary/40 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20 hover:border-primary/60"
                   aria-label={`View ${project.title} live demo`}
                 >
                   <FiExternalLink />

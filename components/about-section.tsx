@@ -2,7 +2,7 @@
 
 import { motion, useInView, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
-import { FiUser } from "react-icons/fi"
+import Image from "next/image"
 
 export default function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -54,15 +54,13 @@ export default function AboutSection() {
 
               {/* Image container */}
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-border bg-card">
-                {/* Placeholder content */}
-                <div className="flex h-full w-full flex-col items-center justify-center gap-4 bg-secondary/30">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full border border-border bg-secondary/60">
-                    <FiUser className="text-2xl text-muted-foreground" />
-                  </div>
-                  <p className="text-sm font-medium text-muted-foreground">
-                    Your photo here
-                  </p>
-                </div>
+                <Image
+                  src="/profile.jpeg"
+                  alt="Profile"
+                  fill
+                  className="object-cover"
+                  priority
+                />
 
                 {/* Subtle gradient overlay */}
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
@@ -116,8 +114,8 @@ export default function AboutSection() {
               className="mt-2 grid grid-cols-3 gap-2 sm:gap-4"
             >
               {[
-                { value: "2+", label: "Years Exp." },
-                { value: "10+", label: "Projects" },
+                { value: "1+", label: "Years Exp." },
+                { value: "7+", label: "Projects" },
                 { value: "5+", label: "Tech Stack" },
               ].map((stat) => (
                 <div
