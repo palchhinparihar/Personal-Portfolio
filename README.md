@@ -14,7 +14,7 @@
 
 ## 💁‍♀️ About Me
 
-Hey there! I'm **Palchhin** 🌟 — a passionate **Full-Stack Developer (MERN)** and **University Researcher** from **DSEU University**. I love building performant, accessible, and beautiful web applications that make a difference. 🌐💫
+Hey there! I'm **Palchhin** 🌟 - a passionate **Full-Stack Developer (MERN)** and **University Researcher** from **DSEU University**. I love building performant, accessible, and beautiful web applications that make a difference. 🌐💫
 
 When I'm not coding, you'll find me contributing to open source, exploring AI/ML, or helping communities grow! 🌺
 
@@ -75,7 +75,6 @@ When I'm not coding, you'll find me contributing to open source, exploring AI/ML
 ### 🌸 Prerequisites
 
 - **Node.js** 18+
-- **pnpm** (recommended 💕)
 
 ### 💻 Installation
 
@@ -101,23 +100,23 @@ Open [http://localhost:3000](http://localhost:3000) to view your sparkly new por
 
 ```
 ├── app/
-│   ├── globals.css           # 🎨 Global styles and Tailwind config
-│   ├── layout.tsx            # 📐 Root layout with metadata
-│   └── page.tsx              # 🏠 Main page component
+│   ├── globals.css            # 🎨 Global styles and Tailwind config
+│   ├── layout.tsx             # 📐 Root layout with metadata
+│   └── page.tsx               # 🏠 Main page component
 ├── components/
-│   ├── hero-section.tsx      # 🌟 Hero/landing section
-│   ├── about-section.tsx     # 💁‍♀️ About me section
-│   ├── skills-section.tsx    # 💅 Skills showcase
-│   ├── projects-section.tsx  # 🛠️ Project portfolio
+│   ├── hero-section.tsx       # 🌟 Hero/landing section
+│   ├── about-section.tsx      # 💁‍♀️ About me section
+│   ├── skills-section.tsx     # 💅 Skills showcase
+│   ├── projects-section.tsx   # 🛠️ Project portfolio
 │   ├── experience-section.tsx # 💼 Work experience
-│   ├── contact-section.tsx   # 📬 Contact form
-│   ├── navbar.tsx            # 🧭 Navigation bar
-│   ├── footer.tsx            # 👣 Footer component
-│   ├── scene-background.tsx  # 🌌 3D background
-│   └── ui/                   # 🧩 shadcn/ui components
-├── hooks/                    # 🪝 Custom React hooks
-├── lib/                      # 🔧 Utility functions
-└── public/                   # 🖼️ Static assets
+│   ├── contact-section.tsx    # 📬 Contact form
+│   ├── navbar.tsx             # 🧭 Navigation bar
+│   ├── footer.tsx             # 👣 Footer component
+│   ├── scene-background.tsx   # 🌌 3D background
+│   └── ui/                    # 🧩 shadcn/ui components
+├── hooks/                     # 🪝 Custom React hooks
+├── lib/                       # 🔧 Utility functions
+└── public/                    # 🖼️ Static assets
 ```
 
 ---
