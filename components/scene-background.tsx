@@ -169,7 +169,6 @@ export default function SceneBackground() {
       transparent: true,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
-      vertexColors: true,
     })
     const petals = new THREE.Points(petalGeo, petalMat)
     scene.add(petals)

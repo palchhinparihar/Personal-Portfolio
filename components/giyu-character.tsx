@@ -9,7 +9,7 @@ export default function GiyuCharacter() {
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 2, duration: 0.8, ease: "easeOut" }}
-      className="fixed bottom-4 right-4 z-40 hidden sm:block md:bottom-6 md:right-6"
+      className="fixed bottom-4 right-4 z-40  sm:block md:bottom-6 md:right-6"
     >
       <motion.div
         animate={{ y: [0, -8, 0] }}
