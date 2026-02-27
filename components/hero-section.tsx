@@ -82,7 +82,7 @@ export default function HeroSection() {
         {/* Main heading with typing animation */}
         <motion.h1
           variants={itemVariants}
-          className="mb-4 font-serif text-4xl font-medium italic leading-tight tracking-wide text-foreground sm:text-5xl md:text-6xl lg:text-8xl"
+          className="mb-4 font-serif font-medium italic leading-tight tracking-wide text-foreground sm:text-4xl md:text-5xl lg:text-7xl"
         >
           <TypingAnimation 
             text="Hi, Palchhin here~" 
