@@ -12,8 +12,8 @@ export default function SceneBackground() {
 
     // --- Renderer setup ---
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color("#08060e")
-    scene.fog = new THREE.FogExp2("#08060e", 0.02)
+    scene.background = new THREE.Color("#050810")
+    scene.fog = new THREE.FogExp2("#050810", 0.018)
 
     const camera = new THREE.PerspectiveCamera(
       60,
@@ -29,11 +29,13 @@ export default function SceneBackground() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
     container.appendChild(renderer.domElement)
 
-    // --- Color palette ---
-    const purpleDark = new THREE.Color("#3b0764")
-    const purpleMid = new THREE.Color("#7c3aed")
-    const purpleLight = new THREE.Color("#c084fc")
-    const purpleGlow = new THREE.Color("#a855f7")
+    // --- Demon Slayer Color palette ---
+    // Blood red flames, teal water breathing, deep night blue
+    const crimsonDark = new THREE.Color("#4a0d0d")
+    const crimsonMid = new THREE.Color("#b91c1c")
+    const crimsonLight = new THREE.Color("#f87171")
+    const tealGlow = new THREE.Color("#14b8a6")
+    const nightBlue = new THREE.Color("#0c1929")
 
     // --- Light Pillars ---
     const pillarCount = 14
@@ -52,9 +54,12 @@ export default function SceneBackground() {
       const width = 0.08 + Math.random() * 0.25
       const geo = new THREE.PlaneGeometry(width, height, 1, 64)
 
-      // Tint each pillar a slightly different shade
+      // Alternate between crimson flames and teal water breathing effects
+      const isFlame = i % 3 !== 0
       const t = Math.random()
-      const col = new THREE.Color().lerpColors(purpleMid, purpleLight, t)
+      const col = isFlame 
+        ? new THREE.Color().lerpColors(crimsonMid, crimsonLight, t)
+        : new THREE.Color().lerpColors(tealGlow, new THREE.Color("#5eead4"), t)
 
       const mat = new THREE.ShaderMaterial({
         uniforms: {
@@ -137,7 +142,7 @@ export default function SceneBackground() {
     const groundMat = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
-        uColor: { value: purpleDark },
+        uColor: { value: crimsonDark },
       },
       vertexShader: `
         varying vec2 vUv;
@@ -188,9 +193,9 @@ export default function SceneBackground() {
 
     const dustMat = new THREE.PointsMaterial({
       size: 0.06,
-      color: purpleLight,
+      color: crimsonLight,
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.4,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
       sizeAttenuation: true,
@@ -198,8 +203,8 @@ export default function SceneBackground() {
     const dust = new THREE.Points(dustGeo, dustMat)
     scene.add(dust)
 
-    // --- Ambient light ---
-    const ambientLight = new THREE.AmbientLight("#1a0a2e", 0.3)
+    // --- Ambient light - deep blue night ---
+    const ambientLight = new THREE.AmbientLight("#0a1628", 0.35)
     scene.add(ambientLight)
 
     // --- Mouse ---
@@ -271,12 +276,12 @@ export default function SceneBackground() {
         pillars[i].rotation.z = Math.sin(t * rotationSpeed + d.phase) * (0.05 + phase2 * 0.03)
       }
 
-      // Ground glow with scroll-based intensity
+      // Ground glow with scroll-based intensity - shifts from crimson to teal
       groundMat.uniforms.uTime.value = t
       const groundColor = new THREE.Color().lerpColors(
-        purpleDark,
-        purpleGlow,
-        smoothScroll * 0.4
+        crimsonDark,
+        tealGlow,
+        smoothScroll * 0.5
       )
       groundMat.uniforms.uColor.value = groundColor
 
