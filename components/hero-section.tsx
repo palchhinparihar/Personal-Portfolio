@@ -39,12 +39,12 @@ const itemVariants = {
 }
 
 const socialLinks = [
-  { icon: FaGithub, href: "https://github.com", label: "GitHub" },
-  { icon: FaLinkedinIn, href: "https://linkedin.com", label: "LinkedIn" },
-  { icon: FaXTwitter, href: "https://x.com", label: "Twitter" },
-  { icon: CodedexIcon, href: "https://codedex.io", label: "Codedex", isCustom: true },
-  { icon: SiDevpost, href: "https://devpost.com", label: "Devpost" },
-  { icon: DevfolioIcon, href: "https://devfolio.co", label: "Devfolio", isCustom: true },
+  { icon: FaGithub, href: "https://github.com/palchhinparihar", label: "GitHub" },
+  { icon: FaLinkedinIn, href: "https://www.linkedin.com/in/palchhinparihar", label: "LinkedIn" },
+  { icon: FaXTwitter, href: "https://x.com/palchhinx", label: "Twitter" },
+  { icon: CodedexIcon, href: "https://www.codedex.io/@palchhin", label: "Codedex", isCustom: true },
+  { icon: SiDevpost, href: "https://devpost.com/palchhinparihar", label: "Devpost" },
+  { icon: DevfolioIcon, href: "https://devfolio.co/@palchhinparihar", label: "Devfolio", isCustom: true },
 ]
 
 export default function HeroSection() {
