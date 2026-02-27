@@ -78,23 +78,21 @@ export default function HeroSection() {
           </span>
         </motion.div>
 
-        {/* Main heading */}
+        {/* Main heading with handwritten style */}
         <motion.h1
           variants={itemVariants}
-          className="mb-4 text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-7xl text-balance"
+          className="mb-4 font-serif text-4xl font-medium italic leading-tight tracking-wide text-foreground sm:text-5xl md:text-6xl lg:text-8xl"
         >
           Hi, <span className="text-primary">Palchhin</span> here
           <span className="text-accent">~</span>
         </motion.h1>
 
-        {/* Subtitle */}
+        {/* Tagline */}
         <motion.p
           variants={itemVariants}
-          className="mx-auto mb-10 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
+          className="mx-auto mb-10 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base"
         >
-          A passionate developer crafting beautiful, performant, and
-          accessible web experiences. Turning ideas into reality, one pixel at
-          a time.
+          An INTJ-A tech girlie who loves building little worlds on a screen... yup, that's me. 🍃
         </motion.p>
 
         {/* CTA buttons */}
