@@ -15,10 +15,16 @@ const SceneBackground = dynamic(
   { ssr: false }
 )
 
+const WaterCursor = dynamic(
+  () => import("@/components/water-cursor"),
+  { ssr: false }
+)
+
 export default function Home() {
   return (
     <main>
       <SceneBackground />
+      <WaterCursor />
       <Navbar />
       <HeroSection />
       <AboutSection />
