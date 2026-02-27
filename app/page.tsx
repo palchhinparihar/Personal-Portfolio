@@ -20,11 +20,17 @@ const WaterCursor = dynamic(
   { ssr: false }
 )
 
+const GiyuCharacter = dynamic(
+  () => import("@/components/giyu-character"),
+  { ssr: false }
+)
+
 export default function Home() {
   return (
     <main>
       <SceneBackground />
       <WaterCursor />
+      <GiyuCharacter />
       <Navbar />
       <HeroSection />
       <AboutSection />
