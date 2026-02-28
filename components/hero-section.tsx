@@ -105,7 +105,7 @@ export default function HeroSection() {
           className="flex flex-wrap items-center justify-center gap-4"
         >
           <motion.a
-            href="/resume.pdf"
+            href="https://drive.google.com/file/d/13zlOvXdMIaUSIJcOi_QFgHzyq9HV9IDt/view?usp=drive_link"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05, y: -2 }}

@@ -142,7 +142,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Palchhin. All rights reserved.
           </p>
           <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            Made with <FiHeart className="text-primary" /> and a lot of coffee
+            Made by me with <FiHeart className="text-primary" />
           </p>
         </motion.div>
       </div>

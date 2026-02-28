@@ -23,7 +23,7 @@ export default function GiyuCharacter() {
           transition={{ delay: 3, duration: 0.4 }}
           className="absolute -top-16 right-0 w-max max-w-[140px] rounded-xl border border-accent/30 bg-card/90 px-3 py-2 text-xs text-muted-foreground backdrop-blur-sm"
         >
-          <span className="text-accent">Water Breathing...</span>
+          <span className="text-accent">Welcome :)</span>
           <div className="absolute -bottom-2 right-6 h-3 w-3 rotate-45 border-b border-r border-accent/30 bg-card/90" />
         </motion.div>
 
