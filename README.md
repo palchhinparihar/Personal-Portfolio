@@ -17,7 +17,7 @@
 
 ## About
 
-**Palchhin** — Full-Stack Developer (MERN), University Researcher at DSEU University, and active open source contributor. Currently exploring AI/ML alongside web development.
+**Palchhin** - Full-Stack Developer (MERN), University Researcher at DSEU University, and active open source contributor. Currently exploring AI/ML alongside web development.
 
 > Full details are available in the portfolio itself.
 
