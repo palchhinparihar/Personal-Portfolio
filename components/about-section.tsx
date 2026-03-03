@@ -78,13 +78,14 @@ export default function AboutSection() {
         </motion.div>
 
         {/* Content grid */}
-        <div className="grid items-center gap-8 sm:gap-12 md:grid-cols-2 md:gap-16">
+        <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2 md:gap-16">
           {/* Image placeholder - slides in from left with parallax */}
           <motion.div
             initial={{ opacity: 0, x: -60 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
             style={{ y: imageY }}
+            className="md:w-100 mx-auto lg:w-full"
           >
             <div className="group relative">
               {/* Decorative border offset */}
@@ -180,14 +181,14 @@ export default function AboutSection() {
             href="https://github.com/palchhinparihar"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-[80%] mx-auto block rounded-xl border border-border p-4 text-center hover:border-primary/30"
+            className="w-full lg:w-[80%] mx-auto block rounded-xl border border-border p-4 text-center hover:border-primary/30"
             aria-label="View palchhinparihar's GitHub profile"
           >
             <img
               src="https://ghchart.rshah.org/palchhinparihar"
               alt="GitHub contributions chart for palchhinparihar"
               loading="lazy"
-              className="mx-auto max-w-full h-auto md:h-30"
+              className="mx-auto max-w-full h-15 md:h-30"
               style={{ filter: 'invert(1) hue-rotate(180deg) saturate(0.9)' }}
               onError={(e) => {
                 const target = e.currentTarget as HTMLImageElement
